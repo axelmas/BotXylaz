@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const apiKey = "YOUR_API_KEY_HERE"; // Reemplaza con tu clave API
+  const apiKey = AIzaSyCIBVk3B2-hg_ZSjM5RU-r4SA5kfnVgdd8; // Reemplaza con tu clave API
   const {
     GoogleGenerativeAI,
   } = require("@google/generative-ai");
