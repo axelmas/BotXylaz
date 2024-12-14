@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xylaz Bot</title>
-    <link rel="stylesheet" href="style.css">  <!-- Asegúrate de tener este archivo CSS -->
+    <link rel="stylesheet" href="style.css">  <!-- Make sure you have this CSS file -->
 </head>
 <body>
     <div class="container">
         <div class="chat-window">
             <div class="chat-header">
-                <h2>Xylaz</h2>
+                <h2>Devil's Terminal</h2>
             </div>
             <div class="chat-history" id="chat-history">
-                <!-- Aquí se irán agregando los mensajes -->
+                <!-- Messages will be dynamically added here -->
             </div>
             <div class="chat-input">
-                <input type="text" id="user-input" placeholder="Escribe algo...">
-                <button id="submit-btn">Enviar</button>
+                <input type="text" id="user-input" placeholder="Type something...">
+                <button id="submit-btn">Send</button>
             </div>
         </div>
     </div>
@@ -28,27 +28,27 @@
             const chatHistory = document.getElementById("chat-history");
 
             if (userMessage) {
-                // Mostrar el mensaje del usuario
+                // Show user message
                 const userMessageElement = document.createElement("div");
                 userMessageElement.classList.add("user-message");
                 userMessageElement.textContent = userMessage;
                 chatHistory.appendChild(userMessageElement);
 
-                // Mostrar la respuesta del bot
+                // Show bot response
                 const botMessageElement = document.createElement("div");
                 botMessageElement.classList.add("bot-message");
-                botMessageElement.textContent = "I will reborn in 1day...";
+                botMessageElement.textContent = "My launch is in 1 day. I will respond to anything you want then.";
                 chatHistory.appendChild(botMessageElement);
 
-                // Limpiar el campo de entrada
+                // Clear the input field
                 document.getElementById("user-input").value = "";
 
-                // Scroll hacia abajo para mostrar el último mensaje
+                // Scroll to the bottom to show the latest message
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
         });
 
-        // Enviar al presionar "Enter"
+        // Send message by pressing "Enter"
         document.getElementById("user-input").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 document.getElementById("submit-btn").click();
