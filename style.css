@@ -1,10 +1,10 @@
-/* Fondo oscuro de la terminal */
+/* Estilo base para el fondo de la terminal */
 body {
     background-color: #000;
     font-family: 'Courier New', monospace;
 }
 
-/* Estilo para el contenedor de la terminal */
+/* Contenedor principal */
 .container {
     display: flex;
     justify-content: center;
@@ -17,11 +17,11 @@ body {
     width: 80%;
     height: 80%;
     background-color: #222;
-    border: 2px solid #00ff00;
+    border: 2px solid #00ff00; /* Verde neón */
     border-radius: 10px;
     color: #00ff00; /* Verde neón */
     padding: 20px;
-    box-shadow: 0 0 10px 2px #00ff00;
+    box-shadow: 0 0 10px 2px #00ff00; /* Sombra verde */
 }
 
 /* Estilo del encabezado de la terminal */
@@ -29,13 +29,15 @@ body {
     text-align: center;
     font-size: 2rem;
     color: #00ff00; /* Verde neón */
+    margin-bottom: 20px;
 }
 
-/* Estilo del historial de mensajes */
+/* Estilo para el historial de mensajes */
 .chat-history {
-    height: calc(100% - 120px);
+    height: calc(100% - 120px); /* Ajustado para que haya espacio suficiente */
     overflow-y: auto;
     padding-right: 10px;
+    color: #00ff00; /* Verde neón */
 }
 
 /* Mensajes del usuario */
@@ -44,13 +46,13 @@ body {
     font-weight: bold;
 }
 
-/* Respuestas del bot */
+/* Respuestas del bot (AI) */
 .ai-message {
     color: #00ff00; /* Verde neón */
     font-style: italic;
 }
 
-/* Estilo de la entrada de texto */
+/* Estilo del input de texto */
 .chat-input input {
     width: 80%;
     padding: 10px;
