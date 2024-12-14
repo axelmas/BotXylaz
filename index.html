@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xylaz Bot</title>
-    <link rel="stylesheet" href="style.css">  <!-- Asegúrate de tener este archivo CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -13,7 +13,7 @@
                 <h2>Xylaz</h2>
             </div>
             <div class="chat-history" id="chat-history">
-                <!-- Los mensajes se agregarán dinámicamente aquí -->
+                <!-- Messages will be dynamically added here -->
             </div>
             <div class="chat-input">
                 <input type="text" id="user-input" placeholder="Type, degen....">
@@ -23,39 +23,39 @@
     </div>
 
     <script>
-        // Asegúrate de poner tu clave de OpenAI aquí
         const OPENAI_API_KEY = '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';
 
-        // Función para enviar el mensaje a OpenAI y obtener la respuesta
+        // Function to send message to OpenAI and get response
         async function getBotResponse(userMessage) {
             try {
-                const response = await fetch('https://api.openai.com/v1/completions', {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${OPENAI_API_KEY}`,
                     },
                     body: JSON.stringify({
-                        model: 'text-davinci-003', // Usa GPT-3 o GPT-4
-                        prompt: userMessage,
-                        max_tokens: 150, // Número de tokens para la respuesta
-                        temperature: 0.7, // Controla la creatividad de la respuesta
+                        model: 'gpt-3.5-turbo', // Or use 'gpt-4' if you have access
+                        messages: [
+                            { role: 'system', content: 'You are an intelligent assistant who responds in English.' },
+                            { role: 'user', content: userMessage },
+                        ],
+                        max_tokens: 150,
+                        temperature: 0.7,
                     }),
                 });
 
-                // Verifica que la respuesta sea correcta
                 if (!response.ok) {
-                    throw new Error('Error en la respuesta de la API');
+                    throw new Error('Error in API response');
                 }
 
                 const data = await response.json();
-                console.log('Respuesta de OpenAI:', data); // Verifica la respuesta en la consola
+                console.log('OpenAI response:', data);
 
-                // Retorna la respuesta del bot
-                return data.choices[0].text.trim();
+                return data.choices[0].message.content.trim();
             } catch (error) {
-                console.error('Error al obtener respuesta de OpenAI:', error);
-                return 'Lo siento, algo salió mal.';
+                console.error('Error getting response from OpenAI:', error);
+                return 'Sorry, something went wrong.';
             }
         }
 
@@ -64,30 +64,30 @@
             const chatHistory = document.getElementById("chat-history");
 
             if (userMessage) {
-                // Mostrar el mensaje del usuario
+                // Show user message
                 const userMessageElement = document.createElement("div");
                 userMessageElement.classList.add("user-message");
                 userMessageElement.textContent = userMessage;
                 chatHistory.appendChild(userMessageElement);
 
-                // Llamar a OpenAI para obtener la respuesta dinámica
+                // Get response from OpenAI
                 const botResponse = await getBotResponse(userMessage);
 
-                // Mostrar la respuesta del bot
+                // Show bot response
                 const botMessageElement = document.createElement("div");
                 botMessageElement.classList.add("bot-message");
                 botMessageElement.textContent = botResponse;
                 chatHistory.appendChild(botMessageElement);
 
-                // Limpiar el campo de entrada
+                // Clear the input field
                 document.getElementById("user-input").value = "";
 
-                // Desplazar hacia abajo para mostrar el último mensaje
+                // Scroll to the bottom to show the latest message
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
         });
 
-        // Enviar mensaje presionando "Enter"
+        // Send message by pressing "Enter"
         document.getElementById("user-input").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 document.getElementById("submit-btn").click();
