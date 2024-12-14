@@ -1,127 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xylaz Terminal</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xylaz Bot</title>
+    <link rel="stylesheet" href="style.css">  <!-- Asegúrate de tener este archivo CSS -->
 </head>
 <body>
-  <div class="container">
-    <div class="chat-window">
-      <div class="chat-header">
-        <h2>Xylaz Terminal</h2>
-      </div>
-      <div class="chat-history" id="chat-history">
-        <!-- Messages will be added dynamically here -->
-      </div>
-      <div class="chat-input">
-        <input type="text" id="user-input" placeholder="Launch in 1 day, degen">
-        <button id="submit-btn" onclick="executeCommand(event)">Send</button>
-      </div>
+    <div class="container">
+        <div class="chat-window">
+            <div class="chat-header">
+                <h2>Xylaz</h2>
+            </div>
+            <div class="chat-history" id="chat-history">
+                <!-- Aquí se irán agregando los mensajes -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Escribe algo...">
+                <button id="submit-btn">Enviar</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- jQuery Library -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    function addMessage(message, sender) {
-      const chatHistory = document.getElementById("chat-history");
-      const messageClass = sender === "user" ? "user-message" : "ai-message";
-      const messageElement = document.createElement("div");
-      messageElement.classList.add(messageClass);
-      messageElement.innerHTML = message;
-      chatHistory.appendChild(messageElement);
-      chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to the bottom
-    }
+    <script>
+        document.getElementById("submit-btn").addEventListener("click", function() {
+            const userMessage = document.getElementById("user-input").value.trim();
+            const chatHistory = document.getElementById("chat-history");
 
-    function getAIResponse(userMessage) {
-      const responses = {
-        "help": [
-          "Here are some commands you can use:",
-          "- 'help': View available commands",
-          "- 'projects': See Xylaz' most recent projects",
-          "- 'contact': Get contact info",
-          "- 'weather': Get the current weather",
-          "- 'joke': Hear a joke",
-          "- 'knowledge': Get random general knowledge",
-          "- 'fact': Hear a random fact",
-          "Use any command to interact with me. I'm here to assist you, mortal."
-        ],
-        "projects": [
-          "Xylaz' recent projects include:",
-          "1. Project A: Innovating technology for the future.",
-          "2. Project B: Creating an advanced learning platform for all.",
-          "Feel free to ask about any of them!"
-        ],
-        "contact": [
-          "You can contact Xylaz at: contact@xylaz.xyz",
-          "If you're looking to collaborate, reach out via email. Let's make something amazing."
-        ],
-        "greeting": [
-          "Hello, mortal! What brings you to my domain today?",
-          "I see you seek answers. What is your request?"
-        ],
-        "about": [
-          "I am an AI built to serve your queries. I know much, but not everything. What do you wish to know?",
-          "I am part of the Xylaz project. My purpose is to assist and answer your questions. Go ahead, ask away!"
-        ],
-        "weather": [
-          "Sorry, I cannot fetch real-time weather data, but you can check a weather website for the latest updates!",
-          "I don't have the power to access weather data, mortal. Use your own device for that!"
-        ],
-        "joke": [
-          "Why don’t skeletons fight each other? They don’t have the guts.",
-          "I told my computer I needed a break, and now it won’t stop sending me Kit-Kats!"
-        ],
-        "knowledge": [
-          "The Eiffel Tower can be 15 cm taller during the summer due to thermal expansion of the metal.",
-          "Bananas are berries, but strawberries are not!"
-        ],
-        "fact": [
-          "Did you know? Honey never spoils. Archaeologists have found pots of honey in ancient tombs that are over 3,000 years old and still safe to eat!",
-          "Sharks existed before trees. They’ve been around for over 400 million years!"
-        ],
-        "default": [
-          "I didn't quite understand that. Try typing 'help' to see the available commands.",
-          "I am an AI. I comprehend many things, but not everything. Be more specific.",
-          "You dare speak in riddles? I require clarity, mortal."
-        ]
-      };
+            if (userMessage) {
+                // Mostrar el mensaje del usuario
+                const userMessageElement = document.createElement("div");
+                userMessageElement.classList.add("user-message");
+                userMessageElement.textContent = userMessage;
+                chatHistory.appendChild(userMessageElement);
 
-      // Simple command detection, returns an array of responses
-      if (responses[userMessage.toLowerCase()]) {
-        return responses[userMessage.toLowerCase()];
-      } else {
-        return responses["default"];
-      }
-    }
+                // Mostrar la respuesta del bot
+                const botMessageElement = document.createElement("div");
+                botMessageElement.classList.add("bot-message");
+                botMessageElement.textContent = "I will reborn in 1day...";
+                chatHistory.appendChild(botMessageElement);
 
-    function executeCommand(event) {
-      if (event.key === "Enter" || event.type === "click") {
-        const input = document.getElementById("user-input").value.trim();
-        const chatHistory = document.getElementById("chat-history");
+                // Limpiar el campo de entrada
+                document.getElementById("user-input").value = "";
 
-        if (input) {
-          addMessage(input, "user"); // Add user's message
+                // Scroll hacia abajo para mostrar el último mensaje
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        });
 
-          const aiResponse = getAIResponse(input); // Get AI response
-          aiResponse.forEach(response => {
-            addMessage(response, "ai"); // Add each response to chat history
-          });
-
-          document.getElementById("user-input").value = ""; // Clear input field
-          window.scrollTo(0, document.body.scrollHeight); // Auto-scroll to bottom
-        }
-      }
-    }
-
-    // Send message when pressing Enter or clicking the button
-    document.getElementById("user-input").addEventListener("keypress", function (e) {
-      if (e.which === 13) {
-        executeCommand(e);
-      }
-    });
-  </script>
+        // Enviar al presionar "Enter"
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("submit-btn").click();
+            }
+        });
+    </script>
 </body>
 </html>
