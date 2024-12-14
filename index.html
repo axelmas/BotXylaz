@@ -8,13 +8,13 @@
     <div class="container">
       <div class="chat-window">
         <div class="chat-header">
-          <h2>Terminal</h2>
+          <h2>Terminal del Diablo</h2>
         </div>
         <div class="chat-history" id="chat-history">
           <!-- Mensajes generados dinámicamente se agregarán aquí -->
         </div>
         <div class="chat-input">
-          <input type="text" id="prompt" placeholder="Escribe tu mensaje aquí...">
+          <input type="text" id="prompt" placeholder="¿Qué quieres, mortal?">
           <button id="submit-btn">Enviar</button>
         </div>
       </div>
@@ -37,15 +37,20 @@
           chatHistory.scrollTop(chatHistory[0].scrollHeight); // Autoscroll al final
         }
 
-        // Simulación de una respuesta automática (puedes reemplazar con tu lógica de IA)
+        // Respuestas del diablo
         function getAIResponse(userMessage) {
-          // Aquí puedes reemplazar la respuesta simulada por tu lógica real
           const responses = {
-            "hola": "¡Hola! ¿Cómo puedo ayudarte?",
-            "adiós": "¡Hasta luego! Que tengas un buen día.",
-            "gracias": "De nada, estoy aquí para ayudar.",
+            "hola": "¿Hola? ¿Eso es todo lo que tienes, miserable criatura?",
+            "quién eres": "Soy tu peor pesadilla. No preguntes si no puedes soportar la respuesta.",
+            "qué haces": "Condeno almas... y respondo a preguntas estúpidas como las tuyas.",
+            "gracias": "¿Gracias? Ja. Mejor no me des las gracias, no las necesito.",
+            "adiós": "Sí, mejor márchate antes de que pierda mi paciencia.",
           };
-          return responses[userMessage.toLowerCase()] || "Lo siento, no entendí eso. ¿Puedes repetirlo?";
+
+          return (
+            responses[userMessage.toLowerCase()] ||
+            "¿Qué clase de tontería es esta? Habla claro, mortal."
+          );
         }
 
         // Manejar el envío de mensajes
@@ -56,7 +61,7 @@
             addMessage(userMessage, "user"); // Muestra el mensaje del usuario
             promptInput.val(""); // Limpia el campo de entrada
 
-            // Muestra la respuesta automática después de un pequeño retraso
+            // Muestra la respuesta grotesca después de un pequeño retraso
             setTimeout(() => {
               const aiResponse = getAIResponse(userMessage); // Obtiene la respuesta
               addMessage(aiResponse, "ai");
