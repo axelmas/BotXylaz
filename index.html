@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Xylaz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xylaz Terminal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <div class="chat-window">
       <div class="chat-header">
-        <h2>Terminal</h2>
+        <h2>Xylaz Terminal</h2>
       </div>
       <div class="chat-history" id="chat-history">
-        <!-- Mensajes generados dinámicamente se agregarán aquí -->
+        <!-- Messages will be added dynamically here -->
       </div>
       <div class="chat-input">
         <input type="text" id="prompt" placeholder="What do you want, mortal?">
@@ -28,15 +30,15 @@
       const promptInput = $("#prompt");
       const submitBtn = $("#submit-btn");
 
-      // Función para mostrar mensajes en el historial
+      // Function to add messages to chat history
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "ai-message";
         const messageElement = `<div class="${messageClass}">${message}</div>`;
         chatHistory.append(messageElement);
-        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Autoscroll al final
+        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
       }
 
-      // Respuestas del diablo (ahora más variadas)
+      // AI responses
       function getAIResponse(userMessage) {
         const responses = {
           "hello": "Is that all you can say, weak mortal? Begone.",
@@ -53,30 +55,29 @@
           "goodbye": "Yes, run away, mortal. But remember, I will always be here, waiting."
         };
 
-        // Respuesta por defecto si no hay coincidencia
         return (
           responses[userMessage.toLowerCase()] ||
           "You speak nonsense. Speak clearly or suffer the consequences."
         );
       }
 
-      // Manejar el envío de mensajes
+      // Handle message sending
       submitBtn.on("click", function () {
         const userMessage = promptInput.val().trim();
 
         if (userMessage) {
-          addMessage(userMessage, "user"); // Muestra el mensaje del usuario
-          promptInput.val(""); // Limpia el campo de entrada
+          addMessage(userMessage, "user"); // Display the user's message
+          promptInput.val(""); // Clear the input field
 
-          // Muestra la respuesta grotesca después de un pequeño retraso
+          // Show the devil's response after a short delay
           setTimeout(() => {
-            const aiResponse = getAIResponse(userMessage); // Obtiene la respuesta
+            const aiResponse = getAIResponse(userMessage); // Get the response
             addMessage(aiResponse, "ai");
-          }, 500); // Retraso simulado de 500ms
+          }, 500); // Simulated 500ms delay
         }
       });
 
-      // Enviar con la tecla Enter
+      // Send message on Enter key press
       promptInput.on("keypress", function (e) {
         if (e.which === 13) {
           submitBtn.click();
