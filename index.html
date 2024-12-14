@@ -1,29 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xylaz Terminal</title>
+<html>
+  <head>
+    <title>Xylaz</title>
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="chat-window">
-            <div class="chat-header">
-                <h2>Xylaz Terminal</h2>
-            </div>
-            <div class="chat-history" id="chat-history">
-                <!-- Messages dynamically added here -->
-            </div>
-            <div class="chat-input">
-                <input type="text" id="prompt" placeholder="Speak, mortal...">
-                <button id="submit-btn">Send</button>
-            </div>
+      <div class="chat-window">
+        <div class="chat-header">
+          <h2>Xylaz</h2>
         </div>
+        <div class="chat-history" id="chat-history">
+          <!-- Messages dynamically added here -->
+        </div>
+        <div class="chat-input">
+          <input type="text" id="prompt" placeholder="What do you want, mortal?">
+          <button id="submit-btn">Send</button>
+        </div>
+      </div>
     </div>
 
     <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="bundle.js"></script>
-</body>
+    <script>
+      $(document).ready(function () {
+        const chatHistory = $("#chat-history");
+        const promptInput = $("#prompt");
+        const submitBtn = $("#submit-btn");
+
+        // Function to add messages to the chat history
+        function addMessage(message, sender) {
+          const messageClass = sender === "user" ? "user-message" : "ai-message";
+          const messageElement = `<div class="${messageClass}">${message}</div>`;
+          chatHistory.append(messageElement);
+          chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+        }
+
+        // Xylaz's responses
+        function getAIResponse(userMessage) {
+          const responses = {
+            "hello": "Hello? That's the best you can do, pathetic human?",
+            "who are you": "I am Xylaz, the one who thrives in chaos. Know your place.",
+            "what are you doing": "Tearing apart souls... and tolerating your nonsense.",
+            "thanks": "Gratitude? From you? Disgusting.",
+            "bye": "Finally. Leave before I lose my patience, worm.",
+          };
+
+          return (
+            responses[userMessage.toLowerCase()] ||
+            "Xylaz doesn't have time for your gibberish. Speak properly."
+          );
+        }
+
+        // Handle message sending
+        submitBtn.on("click", function () {
+          const userMessage = promptInput.val().trim();
+
+          if (userMessage) {
+            addMessage(userMessage, "user"); // Display the user's message
+            promptInput.val(""); // Clear the input field
+
+            // Show Xylaz's response after a short delay
+            setTimeout(() => {
+              const aiResponse = getAIResponse(userMessage); // Get the response
+              addMessage(aiResponse, "ai");
+            }, 500); // Simulated 500ms delay
+          }
+        });
+
+        // Send message on pressing Enter
+        promptInput.on("keypress", function (e) {
+          if (e.which === 13) {
+            submitBtn.click();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
