@@ -8,68 +8,68 @@
     <div class="container">
       <div class="chat-window">
         <div class="chat-header">
-          <h2>Terminal del Diablo</h2>
+          <h2>Devil's Terminal</h2>
         </div>
         <div class="chat-history" id="chat-history">
-          <!-- Mensajes generados dinámicamente se agregarán aquí -->
+          <!-- Messages dynamically added here -->
         </div>
         <div class="chat-input">
-          <input type="text" id="prompt" placeholder="¿Qué quieres, mortal?">
-          <button id="submit-btn">Enviar</button>
+          <input type="text" id="prompt" placeholder="What do you want, mortal?">
+          <button id="submit-btn">Send</button>
         </div>
       </div>
     </div>
 
-    <!-- Librería jQuery -->
+    <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Archivo con la lógica de auto respuesta -->
+    <!-- Script with auto-response logic -->
     <script>
       $(document).ready(function () {
         const chatHistory = $("#chat-history");
         const promptInput = $("#prompt");
         const submitBtn = $("#submit-btn");
 
-        // Función para mostrar mensajes en el historial
+        // Function to display messages in the chat history
         function addMessage(message, sender) {
           const messageClass = sender === "user" ? "user-message" : "ai-message";
           const messageElement = `<div class="${messageClass}">${message}</div>`;
           chatHistory.append(messageElement);
-          chatHistory.scrollTop(chatHistory[0].scrollHeight); // Autoscroll al final
+          chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
         }
 
-        // Respuestas del diablo
+        // Devil's responses
         function getAIResponse(userMessage) {
           const responses = {
-            "hola": "¿Hola? ¿Eso es todo lo que tienes, miserable criatura?",
-            "quién eres": "Soy tu peor pesadilla. No preguntes si no puedes soportar la respuesta.",
-            "qué haces": "Condeno almas... y respondo a preguntas estúpidas como las tuyas.",
-            "gracias": "¿Gracias? Ja. Mejor no me des las gracias, no las necesito.",
-            "adiós": "Sí, mejor márchate antes de que pierda mi paciencia.",
+            "hello": "Hello? Is that the best you can come up with, pathetic mortal?",
+            "who are you": "I am your worst nightmare. Don't ask questions you can't handle.",
+            "what are you doing": "Condemning souls... and answering pointless questions like yours.",
+            "thanks": "Thanks? Hah. Don't waste your gratitude, I don't need it.",
+            "bye": "Finally. Leave before I lose my patience.",
           };
 
           return (
             responses[userMessage.toLowerCase()] ||
-            "¿Qué clase de tontería es esta? Habla claro, mortal."
+            "What kind of nonsense is this? Speak clearly, mortal."
           );
         }
 
-        // Manejar el envío de mensajes
+        // Handle message sending
         submitBtn.on("click", function () {
           const userMessage = promptInput.val().trim();
 
           if (userMessage) {
-            addMessage(userMessage, "user"); // Muestra el mensaje del usuario
-            promptInput.val(""); // Limpia el campo de entrada
+            addMessage(userMessage, "user"); // Display the user's message
+            promptInput.val(""); // Clear the input field
 
-            // Muestra la respuesta grotesca después de un pequeño retraso
+            // Show the devil's response after a short delay
             setTimeout(() => {
-              const aiResponse = getAIResponse(userMessage); // Obtiene la respuesta
+              const aiResponse = getAIResponse(userMessage); // Get the response
               addMessage(aiResponse, "ai");
-            }, 500); // Retraso simulado de 500ms
+            }, 500); // Simulated 500ms delay
           }
         });
 
-        // Enviar con la tecla Enter
+        // Send message on pressing Enter
         promptInput.on("keypress", function (e) {
           if (e.which === 13) {
             submitBtn.click();
