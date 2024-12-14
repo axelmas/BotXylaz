@@ -23,27 +23,40 @@
     </div>
 
     <script>
-        // Cambia la clave API por la tuya propia
+        // Asegúrate de poner tu clave de OpenAI aquí
         const OPENAI_API_KEY = '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';
 
-        // Función para enviar mensaje al servidor OpenAI y obtener respuesta
+        // Función para enviar el mensaje a OpenAI y obtener la respuesta
         async function getBotResponse(userMessage) {
-            const response = await fetch('https://api.openai.com/v1/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: 'text-davinci-003', // O GPT-4, dependiendo de tu elección
-                    prompt: userMessage,
-                    max_tokens: 150, // Ajusta el número de tokens si es necesario
-                    temperature: 0.7, // Controla la aleatoriedad de la respuesta
-                }),
-            });
+            try {
+                const response = await fetch('https://api.openai.com/v1/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: 'text-davinci-003', // Usa GPT-3 o GPT-4
+                        prompt: userMessage,
+                        max_tokens: 150, // Número de tokens para la respuesta
+                        temperature: 0.7, // Controla la creatividad de la respuesta
+                    }),
+                });
 
-            const data = await response.json();
-            return data.choices[0].text.trim(); // Respuesta del bot
+                // Verifica que la respuesta sea correcta
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la API');
+                }
+
+                const data = await response.json();
+                console.log('Respuesta de OpenAI:', data); // Verifica la respuesta en la consola
+
+                // Retorna la respuesta del bot
+                return data.choices[0].text.trim();
+            } catch (error) {
+                console.error('Error al obtener respuesta de OpenAI:', error);
+                return 'Lo siento, algo salió mal.';
+            }
         }
 
         document.getElementById("submit-btn").addEventListener("click", async function() {
@@ -51,16 +64,16 @@
             const chatHistory = document.getElementById("chat-history");
 
             if (userMessage) {
-                // Mostrar mensaje del usuario
+                // Mostrar el mensaje del usuario
                 const userMessageElement = document.createElement("div");
                 userMessageElement.classList.add("user-message");
                 userMessageElement.textContent = userMessage;
                 chatHistory.appendChild(userMessageElement);
 
-                // Llamar a la IA para obtener la respuesta del bot
+                // Llamar a OpenAI para obtener la respuesta dinámica
                 const botResponse = await getBotResponse(userMessage);
 
-                // Mostrar respuesta del bot
+                // Mostrar la respuesta del bot
                 const botMessageElement = document.createElement("div");
                 botMessageElement.classList.add("bot-message");
                 botMessageElement.textContent = botResponse;
