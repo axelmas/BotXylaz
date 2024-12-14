@@ -13,10 +13,10 @@
                 <h2>Xylaz Terminal</h2>
             </div>
             <div class="chat-history" id="chat-history">
-                <!-- Chat messages will appear here -->
+                <!-- Messages dynamically added here -->
             </div>
             <div class="chat-input">
-                <input type="text" id="prompt" placeholder="What do you want, mortal?">
+                <input type="text" id="prompt" placeholder="Speak, mortal...">
                 <button id="submit-btn">Send</button>
             </div>
         </div>
@@ -24,60 +24,6 @@
 
     <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            const chatHistory = $("#chat-history");
-            const promptInput = $("#prompt");
-            const submitBtn = $("#submit-btn");
-
-            // Function to add messages to the chat history
-            function addMessage(message, sender) {
-                const messageClass = sender === "user" ? "user-message" : "ai-message";
-                const messageElement = `<div class="${messageClass}">${message}</div>`;
-                chatHistory.append(messageElement);
-                chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
-            }
-
-            // Devil's responses
-            function getAIResponse(userMessage) {
-                const responses = {
-                    "hello": "Hello? That's the best you can come up with, pathetic human?",
-                    "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
-                    "what are you doing": "Condemning souls... and dealing with your pointless chatter.",
-                    "thanks": "Thanks? Hah. Save your gratitude, I don't need it.",
-                    "bye": "Finally. Leave before I lose my temper.",
-                };
-
-                return (
-                    responses[userMessage.toLowerCase()] ||
-                    "What kind of nonsense is this? Speak clearly, mortal."
-                );
-            }
-
-            // Handle message sending
-            submitBtn.on("click", function () {
-                const userMessage = promptInput.val().trim();
-
-                if (userMessage) {
-                    addMessage(userMessage, "user"); // Display the user's message
-                    promptInput.val(""); // Clear the input field
-
-                    // Show the devil's response after a short delay
-                    setTimeout(() => {
-                        const aiResponse = getAIResponse(userMessage); // Get the response
-                        addMessage(aiResponse, "ai");
-                    }, 500); // Simulated 500ms delay
-                }
-            });
-
-            // Send message on pressing Enter
-            promptInput.on("keypress", function (e) {
-                if (e.which === 13) {
-                    submitBtn.click();
-                }
-            });
-        });
-    </script>
+    <script src="bundle.js"></script>
 </body>
 </html>
