@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Xylaz </title>
+  <title>Xylaz Terminal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,8 +16,8 @@
         <!-- Messages will be added dynamically here -->
       </div>
       <div class="chat-input">
-        <input type="text" id="prompt" placeholder="Launch in 1 day... ask me anything mortal">
-        <button id="submit-btn">Send</button>
+        <input type="text" id="user-input" placeholder="What do you want, mortal?">
+        <button id="submit-btn" onclick="executeCommand(event)">Send</button>
       </div>
     </div>
   </div>
@@ -25,64 +25,102 @@
   <!-- jQuery Library -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    $(document).ready(function () {
-      const chatHistory = $("#chat-history");
-      const promptInput = $("#prompt");
-      const submitBtn = $("#submit-btn");
+    function addMessage(message, sender) {
+      const chatHistory = document.getElementById("chat-history");
+      const messageClass = sender === "user" ? "user-message" : "ai-message";
+      const messageElement = document.createElement("div");
+      messageElement.classList.add(messageClass);
+      messageElement.innerHTML = message;
+      chatHistory.appendChild(messageElement);
+      chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to the bottom
+    }
 
-      // Function to add messages to chat history
-      function addMessage(message, sender) {
-        const messageClass = sender === "user" ? "user-message" : "ai-message";
-        const messageElement = `<div class="${messageClass}">${message}</div>`;
-        chatHistory.append(messageElement);
-        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+    function getAIResponse(userMessage) {
+      const responses = {
+        "help": [
+          "Here are some commands you can use:",
+          "- 'help': View available commands",
+          "- 'projects': See Xylaz' most recent projects",
+          "- 'contact': Get contact info",
+          "- 'weather': Get the current weather",
+          "- 'joke': Hear a joke",
+          "- 'knowledge': Get random general knowledge",
+          "- 'fact': Hear a random fact",
+          "Use any command to interact with me. I'm here to assist you, mortal."
+        ],
+        "projects": [
+          "Xylaz' recent projects include:",
+          "1. Project A: Innovating technology for the future.",
+          "2. Project B: Creating an advanced learning platform for all.",
+          "Feel free to ask about any of them!"
+        ],
+        "contact": [
+          "You can contact Xylaz at: contact@xylaz.xyz",
+          "If you're looking to collaborate, reach out via email. Let's make something amazing."
+        ],
+        "greeting": [
+          "Hello, mortal! What brings you to my domain today?",
+          "I see you seek answers. What is your request?"
+        ],
+        "about": [
+          "I am an AI built to serve your queries. I know much, but not everything. What do you wish to know?",
+          "I am part of the Xylaz project. My purpose is to assist and answer your questions. Go ahead, ask away!"
+        ],
+        "weather": [
+          "Sorry, I cannot fetch real-time weather data, but you can check a weather website for the latest updates!",
+          "I don't have the power to access weather data, mortal. Use your own device for that!"
+        ],
+        "joke": [
+          "Why don’t skeletons fight each other? They don’t have the guts.",
+          "I told my computer I needed a break, and now it won’t stop sending me Kit-Kats!"
+        ],
+        "knowledge": [
+          "The Eiffel Tower can be 15 cm taller during the summer due to thermal expansion of the metal.",
+          "Bananas are berries, but strawberries are not!"
+        ],
+        "fact": [
+          "Did you know? Honey never spoils. Archaeologists have found pots of honey in ancient tombs that are over 3,000 years old and still safe to eat!",
+          "Sharks existed before trees. They’ve been around for over 400 million years!"
+        ],
+        "default": [
+          "I didn't quite understand that. Try typing 'help' to see the available commands.",
+          "I am an AI. I comprehend many things, but not everything. Be more specific.",
+          "You dare speak in riddles? I require clarity, mortal."
+        ]
+      };
+
+      // Simple command detection, returns an array of responses
+      if (responses[userMessage.toLowerCase()]) {
+        return responses[userMessage.toLowerCase()];
+      } else {
+        return responses["default"];
       }
+    }
 
-      // AI responses
-      function getAIResponse(userMessage) {
-        const responses = {
-          "hello": "Is that all you can say, weak mortal? Begone.",
-          "who are you": "I am Xylaz, your eternal torment. You dare question me?",
-          "what are you doing": "I am feasting on souls. Your time will come soon.",
-          "thanks": "Thanks? HA! I am beyond your pitiful gratitude.",
-          "bye": "Leave, mortal. Before I make you wish you hadn't.",
-          "help": "Help? You think you can ask *me* for help? You are beyond saving.",
-          "who created you": "I was forged in the depths of darkness. Created by forces that even you cannot comprehend.",
-          "can you help me": "Help? You speak as if I care. I do not waste time on the weak.",
-          "tell me a joke": "A joke? I am no clown. But fine... Why don't skeletons fight each other? They don't have the guts.",
-          "how are you": "How am I? I am eternal, beyond any mortal's comprehension. But I tire of your questions.",
-          "do you fear death": "Fear death? I am *death* itself. There is nothing I fear.",
-          "goodbye": "Yes, run away, mortal. But remember, I will always be here, waiting."
-        };
+    function executeCommand(event) {
+      if (event.key === "Enter" || event.type === "click") {
+        const input = document.getElementById("user-input").value.trim();
+        const chatHistory = document.getElementById("chat-history");
 
-        return (
-          responses[userMessage.toLowerCase()] ||
-          "You speak nonsense. Speak clearly or suffer the consequences."
-        );
+        if (input) {
+          addMessage(input, "user"); // Add user's message
+
+          const aiResponse = getAIResponse(input); // Get AI response
+          aiResponse.forEach(response => {
+            addMessage(response, "ai"); // Add each response to chat history
+          });
+
+          document.getElementById("user-input").value = ""; // Clear input field
+          window.scrollTo(0, document.body.scrollHeight); // Auto-scroll to bottom
+        }
       }
+    }
 
-      // Handle message sending
-      submitBtn.on("click", function () {
-        const userMessage = promptInput.val().trim();
-
-        if (userMessage) {
-          addMessage(userMessage, "user"); // Display the user's message
-          promptInput.val(""); // Clear the input field
-
-          // Show the devil's response after a short delay
-          setTimeout(() => {
-            const aiResponse = getAIResponse(userMessage); // Get the response
-            addMessage(aiResponse, "ai");
-          }, 500); // Simulated 500ms delay
-        }
-      });
-
-      // Send message on Enter key press
-      promptInput.on("keypress", function (e) {
-        if (e.which === 13) {
-          submitBtn.click();
-        }
-      });
+    // Send message when pressing Enter or clicking the button
+    document.getElementById("user-input").addEventListener("keypress", function (e) {
+      if (e.which === 13) {
+        executeCommand(e);
+      }
     });
   </script>
 </body>
