@@ -8,19 +8,19 @@
 <div class="container">
   <div class="chat-window">
     <div class="chat-header">
-      <h2>Xylaz</h2> <!-- Changed to Xylaz -->
+      <h2>Xylaz</h2>
     </div>
     <div class="chat-history" id="chat-history">
-      <!-- Messages will be dynamically added here -->
+     
     </div>
     <div class="chat-input">
-      <input type="text" id="prompt" placeholder="Speak, mortal."> <!-- Changed the placeholder -->
+      <input type="text" id="prompt" placeholder="Speak, mortal."> 
       <button id="submit-btn">Send</button>
     </div>
   </div>
 </div>
 
-<!-- jQuery Library -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
@@ -28,15 +28,15 @@
     const promptInput = $("#prompt");
     const submitBtn = $("#submit-btn");
 
-    // Function to add messages to the chat history
+    
     function addMessage(message, sender) {
       const messageClass = sender === "user" ? "user-message" : "ai-message";
       const messageElement = `<div class="${messageClass}">${message}</div>`;
       chatHistory.append(messageElement);
-      chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+      chatHistory.scrollTop(chatHistory[0].scrollHeight); 
     }
 
-    // Devil's responses (Xylaz)
+   
     function getAIResponse(userMessage) {
       const responses = {
         "hello": "Hello? Is this the best you can come up with, pathetic human?",
@@ -52,23 +52,22 @@
       );
     }
 
-    // Handle message sending
+  
     submitBtn.on("click", function () {
       const userMessage = promptInput.val().trim();
 
       if (userMessage) {
-        addMessage(userMessage, "user"); // Display user's message
-        promptInput.val(""); // Clear the input field
-
-        // Show Xylaz's response after a short delay
+        addMessage(userMessage, "user"); 
+        promptInput.val(""); 
+        
         setTimeout(() => {
-          const aiResponse = getAIResponse(userMessage); // Get the response
+          const aiResponse = getAIResponse(userMessage); 
           addMessage(aiResponse, "ai");
-        }, 500); // Simulated 500ms delay
+        }, 500); 
       }
     });
 
-    // Send message on pressing Enter
+   
     promptInput.on("keypress", function (e) {
       if (e.which === 13) {
         submitBtn.click();
