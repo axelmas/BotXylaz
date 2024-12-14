@@ -14,7 +14,7 @@ $(document).ready(function () {
     // Función para obtener respuesta de la IA de Google Generative AI
     async function getAIResponse(userMessage) {
         const apiKey = 'AIzaSyCIBVk3B2-hg_ZSjM5RU-r4SA5kfnVgdd8'; // Reemplaza con tu clave de API de Google Generative AI
-        const url = 'https://your-backend-url-or-api-endpoint'; // En este caso, aquí deberías poner la URL para la API de Google o de tu servidor si usas uno
+        const url = '"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCIBVk3B2-hg_ZSjM5RU-r4SA5kfnVgdd8; // En este caso, aquí deberías poner la URL para la API de Google o de tu servidor si usas uno
         const body = JSON.stringify({
             model: "gemini-1.5-flash",  // O el modelo que estés utilizando
             prompt: userMessage,
