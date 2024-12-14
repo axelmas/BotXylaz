@@ -1,86 +1,88 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Xylaz</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="chat-window">
-        <div class="chat-header">
-          <h2>Xylaz</h2>
-        </div>
-        <div class="chat-history" id="chat-history">
-          <!-- Messages dynamically added here -->
-        </div>
-        <div class="chat-input">
-          <input type="text" id="prompt" placeholder="What do you want, mortal?">
-          <button id="submit-btn">Send</button>
-        </div>
+<head>
+  <title>Xylaz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="chat-window">
+      <div class="chat-header">
+        <h2>Terminal</h2>
+      </div>
+      <div class="chat-history" id="chat-history">
+        <!-- Mensajes generados dinámicamente se agregarán aquí -->
+      </div>
+      <div class="chat-input">
+        <input type="text" id="prompt" placeholder="What do you want, mortal?">
+        <button id="submit-btn">Send</button>
       </div>
     </div>
+  </div>
 
-    <!-- jQuery Library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Script with auto-response logic -->
-    <script>
-      $(document).ready(function () {
-        const chatHistory = $("#chat-history");
-        const promptInput = $("#prompt");
-        const submitBtn = $("#submit-btn");
+  <!-- jQuery Library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      const chatHistory = $("#chat-history");
+      const promptInput = $("#prompt");
+      const submitBtn = $("#submit-btn");
 
-        // Function to display messages in the chat history
-        function addMessage(message, sender) {
-          const messageClass = sender === "user" ? "user-message" : "ai-message";
-          const messageElement = `<div class="${messageClass}">${message}</div>`;
-          chatHistory.append(messageElement);
-          chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+      // Función para mostrar mensajes en el historial
+      function addMessage(message, sender) {
+        const messageClass = sender === "user" ? "user-message" : "ai-message";
+        const messageElement = `<div class="${messageClass}">${message}</div>`;
+        chatHistory.append(messageElement);
+        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Autoscroll al final
+      }
+
+      // Respuestas del diablo (ahora más variadas)
+      function getAIResponse(userMessage) {
+        const responses = {
+          "hello": "Is that all you can say, weak mortal? Begone.",
+          "who are you": "I am Xylaz, your eternal torment. You dare question me?",
+          "what are you doing": "I am feasting on souls. Your time will come soon.",
+          "thanks": "Thanks? HA! I am beyond your pitiful gratitude.",
+          "bye": "Leave, mortal. Before I make you wish you hadn't.",
+          "help": "Help? You think you can ask *me* for help? You are beyond saving.",
+          "who created you": "I was forged in the depths of darkness. Created by forces that even you cannot comprehend.",
+          "can you help me": "Help? You speak as if I care. I do not waste time on the weak.",
+          "tell me a joke": "A joke? I am no clown. But fine... Why don't skeletons fight each other? They don't have the guts.",
+          "how are you": "How am I? I am eternal, beyond any mortal's comprehension. But I tire of your questions.",
+          "do you fear death": "Fear death? I am *death* itself. There is nothing I fear.",
+          "goodbye": "Yes, run away, mortal. But remember, I will always be here, waiting."
+        };
+
+        // Respuesta por defecto si no hay coincidencia
+        return (
+          responses[userMessage.toLowerCase()] ||
+          "You speak nonsense. Speak clearly or suffer the consequences."
+        );
+      }
+
+      // Manejar el envío de mensajes
+      submitBtn.on("click", function () {
+        const userMessage = promptInput.val().trim();
+
+        if (userMessage) {
+          addMessage(userMessage, "user"); // Muestra el mensaje del usuario
+          promptInput.val(""); // Limpia el campo de entrada
+
+          // Muestra la respuesta grotesca después de un pequeño retraso
+          setTimeout(() => {
+            const aiResponse = getAIResponse(userMessage); // Obtiene la respuesta
+            addMessage(aiResponse, "ai");
+          }, 500); // Retraso simulado de 500ms
         }
-
-        // Devil's responses
-        function getAIResponse(userMessage) {
-          const responses = {
-            "hello": "Hello? Is that the best you can come up with, pathetic mortal?",
-            "who are you": "I am your worst nightmare. Don't ask questions you can't handle.",
-            "what are you doing": "Condemning souls... and answering pointless questions like yours.",
-            "thanks": "Thanks? Hah. Don't waste your gratitude, I don't need it.",
-            "bye": "Finally. Leave before I lose my patience.",
-          };
-
-          return (
-            responses[userMessage.toLowerCase()] ||
-            "What kind of nonsense is this? Speak clearly, mortal."
-            "hello": "Hello? Is that the best you can come up with, pathetic mortal?",
-            "who are you": "I am your worst nightmare. Don't ask questions you can't handle.",
-            "what are you doing": "Condemning souls... and answering pointless questions like yours.",
-            "thanks": "Thanks? Hah. Don't waste your gratitude, I don't need it.",
-            "bye": "Finally. Leave before I lose my patience.",
-          );
-        }
-
-        // Handle message sending
-        submitBtn.on("click", function () {
-          const userMessage = promptInput.val().trim();
-
-          if (userMessage) {
-            addMessage(userMessage, "user"); // Display the user's message
-            promptInput.val(""); // Clear the input field
-
-            // Show the devil's response after a short delay
-            setTimeout(() => {
-              const aiResponse = getAIResponse(userMessage); // Get the response
-              addMessage(aiResponse, "ai");
-            }, 500); // Simulated 500ms delay
-          }
-        });
-
-        // Send message on pressing Enter
-        promptInput.on("keypress", function (e) {
-          if (e.which === 13) {
-            submitBtn.click();
-          }
-        });
       });
-    </script>
-  </body>
+
+      // Enviar con la tecla Enter
+      promptInput.on("keypress", function (e) {
+        if (e.which === 13) {
+          submitBtn.click();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
