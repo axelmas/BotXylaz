@@ -14,12 +14,21 @@
       <!-- Messages will be dynamically added here -->
     </div>
     <div class="chat-input">
-      <input type="text" id="prompt" placeholder="Speak, mortal."> <!-- Changed the placeholder -->
+      <input type="text" id="prompt" ascii-art="Speak, mortal."> <!-- Changed the placeholder -->
       <button id="submit-btn">Send</button>
     </div>
   </div>
 </div>
-
+public class AsciiArtExample {
+    public static void main(String[] args) {
+        System.out.println("   _____   ");
+        System.out.println("  /     \\  ");
+        System.out.println(" /       \\ ");
+        System.out.println("|   O   O  |");
+        System.out.println("|    \\_/   |");
+        System.out.println(" \\_______/  ");
+    }
+}
 <!-- jQuery Library -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
