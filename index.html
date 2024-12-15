@@ -1,177 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xylaz Bot</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #121212;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+require('dotenv').config(); // Asegúrate de instalar dotenv primero
 
-    .container {
-      width: 90%;
-      max-width: 600px;
-      border: 2px solid #00ff00;
-      border-radius: 8px;
-      padding: 20px;
-      background-color: #1e1e1e;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 80vh;
-    }
+$(document).ready(function () {
+  // Mostrar un mensaje de saludo al cargar la página
+  $('#chat-history').append('<p>I am Xylaz...</p>');
 
-    .chat-history {
-      flex-grow: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #00ff00;
-      border-radius: 4px;
-      background-color: #2b2b2b;
-    }
+  // Configuración de la API de OpenAI
+  const apiKey = process.env.OPENAI_API_KEY;
 
-    .chat-message {
-      margin: 5px 0;
-    }
-
-    .user-message {
-      text-align: right;
-      color: #00ff00;
-    }
-
-    .bot-message {
-      text-align: left;
-      color: #ffffff;
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 10px;
-    }
-
-    .chat-input input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid #00ff00;
-      border-radius: 4px;
-      background-color: #2b2b2b;
-      color: #ffffff;
-    }
-
-    .chat-input button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      background-color: #00ff00;
-      color: #000;
-      cursor: pointer;
-    }
-
-    .chat-input button:hover {
-      background-color: #00cc00;
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/figlet@1.5.0/js/figlet.min.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h2 id="bot-name">Xylaz Bot</h2>
-    <div class="chat-history" id="chat-history">
-      <!-- Messages will be dynamically added here -->
-    </div>
-    <div class="chat-input">
-      <input type="text" id="prompt" placeholder="Ask Xylaz something...">
-      <button id="submit-btn">Send</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const chatHistory = document.getElementById("chat-history");
-      const promptInput = document.getElementById("prompt");
-      const submitButton = document.getElementById("submit-btn");
-      const botNameElement = document.getElementById("bot-name");
-
-      // Function to add messages to the chat
-      function addMessage(message, sender) {
-        const messageClass = sender === "user" ? "user-message" : "bot-message";
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message", messageClass);
-        messageElement.textContent = message;
-        chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
-      }
-
-      // Function to fetch response from the backend
-      async function getAIResponse(userMessage) {
-        // Simulated demonic responses
-        const responses = [
-          "You dare speak to me? Foolish mortal, you shall regret this.",
-          "I can hear your soul screaming... it pleases me.",
-          "You think you can challenge me? You are but a speck in the abyss.",
-          "Begone, human, or face eternal suffering.",
-          "You are nothing but dust in the wind. Do you feel that? The void calls."
-          "Im Xylaz, Fool"
-          " Im here? "
-        ];
-
-        // Return a random demonic response
-        return responses[Math.floor(Math.random() * responses.length)];
-      }
-
-      // Function to change bot's name to ASCII art
-      function setBotNameToAsciiArt() {
-        figlet('Xylaz Bot', function(err, data) {
-          if (err) {
-            console.log('Something went wrong...');
-            return;
-          }
-          botNameElement.textContent = '';  // Clear existing text
-          const pre = document.createElement('pre');
-          pre.textContent = data;  // ASCII Art
-          botNameElement.appendChild(pre);  // Add ASCII Art to the bot name element
-        });
-      }
-
-      // Handle user input
-      submitButton.addEventListener("click", async function () {
-        const userMessage = promptInput.value;
-        if (!userMessage.trim()) return;
-
-        addMessage(userMessage, "user");
-        promptInput.value = ""; // Clear input field
-
-        addMessage("Xylaz is thinking...", "bot");
-        const botResponse = await getAIResponse(userMessage);
-
-        // Replace the "thinking" message with the bot's response
-        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
-        thinkingMessage.textContent = botResponse;
-      });
-
-      // Allow pressing Enter to send the message
-      promptInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-          submitButton.click();
-          event.preventDefault();
-        }
-      });
-
-      // Set the bot's name to ASCII art on load
-      setBotNameToAsciiArt();
+  // Función para interactuar con OpenAI
+  async function getAIResponse(prompt) {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: Bearer ${apiKey},
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [
+          { role: 'system', content: 'You are Xylaz, a war hero AI that only speaks darkly and directly. You exist in a terminal and often challenge the user.' },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 1,
+        max_tokens: 150,
+      }),
     });
-  </script>
-</body>
-</html>
+
+    if (!response.ok) {
+      console.error('Error:', response.statusText);
+      return 'I cannot process your request.';
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  }
+
+  // Manejar el envío de mensajes del usuario
+  $('#send-button').click(async function () {
+    const userMessage = $('#user-input').val();
+    if (!userMessage) return;
+
+    // Mostrar el mensaje del usuario en el historial del chat
+    $('#chat-history').append(<p class="user-message">You: ${userMessage}</p>);
+    $('#user-input').val(''); // Limpiar el campo de entrada
+
+    // Obtener respuesta del bot
+    $('#chat-history').append('<p class="bot-message">Xylaz is typing...</p>');
+    const botResponse = await getAIResponse(userMessage);
+
+    // Reemplazar el texto de "Xylaz is typing..." con la respuesta del bot
+    $('#chat-history p.bot-message').last().text(Xylaz: ${botResponse});
+  });
+
+  // Permitir enviar mensajes al presionar Enter
+  $('#user-input').keypress(function (event) {
+    if (event.which === 13) {
+      event.preventDefault();
+      $('#send-button').click();
+    }
+  });
+});
+
 
