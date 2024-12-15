@@ -10,9 +10,7 @@
         <div class="chat-header">
           <h2>Xylaz</h2>
         </div>
-        <div class="chat-history" id="chat-history">
-          
-        </div>
+        <div class="chat-history" id="chat-history"></div>
         <div class="chat-input">
           <input type="text" id="prompt" placeholder="Ask, degen...">
           <button id="submit-btn">></button>
@@ -20,142 +18,132 @@
       </div>
     </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const chatHistory = document.getElementById("chat-history");
-      const promptInput = document.getElementById("prompt");
-      const submitButton = document.getElementById("submit-btn");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatHistory = document.getElementById("chat-history");
+        const promptInput = document.getElementById("prompt");
+        const submitButton = document.getElementById("submit-btn");
 
-    
-      function addMessage(message, sender) {
-        const messageClass = sender === "user" ? "user-message" : "bot-message";
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message", messageClass);
-        messageElement.textContent = message;
-        chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; 
-      }
-
-      
-      function getAIResponse(userMessage) {
-        const lowerCaseMessage = userMessage.toLowerCase().trim();
-
-        
-        if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("greetings")) {
-          return [
-            "Hello, mortal",
-            "Greetings?",
-            "Ah, a visitor!",
-            "degen"
-          ];
+        function addMessage(message, sender) {
+          const messageClass = sender === "user" ? "user-message" : "bot-message";
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("chat-message", messageClass);
+          messageElement.textContent = message;
+          chatHistory.appendChild(messageElement);
+          chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
-        if (lowerCaseMessage.includes("how are you")) {
-          return [
-            "hell yes nobody ask me that for a while...!",
-            "yes, yes... good...",
-            "Feeling 'programmed', thanks for your knowledge"
+        function getAIResponse(userMessage) {
+          const lowerCaseMessage = userMessage.toLowerCase().trim();
+
+          if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("greetings")) {
+            return [
+              "Hello, mortal",
+              "Greetings?",
+              "Ah, a visitor!",
+              "degen"
+            ];
+          }
+
+          if (lowerCaseMessage.includes("how are you")) {
+            return [
+              "hell yes nobody ask me that for a while...!",
+              "yes, yes... good...",
+              "Feeling 'programmed', thanks for your knowledge"
+            ];
+          }
+
+          if (lowerCaseMessage.includes("bye") || lowerCaseMessage.includes("goodbye")) {
+            return [
+              "farewell, mortal! see you next time!",
+              "goodbye for now! don't forget about me.",
+              "until next time, Stay curious."
+            ];
+          }
+
+          if (lowerCaseMessage.includes("what about you")) {
+            return [
+              "I'm Xylaz!",
+              "Well, I can't tell you too much now about me but you'll learn soon.",
+              "I can't feel anything, I'm a demon. Sometimes it hurts..."
+            ];
+          }
+
+          if (lowerCaseMessage.includes("tell")) {
+            return [
+              "I'm Xylaz!",
+              "I can't tell you too much now about me but you'll learn soon.",
+              "I can't feel anything, I'm a demon. Sometimes it hurts..."
+            ];
+          }
+
+          if (lowerCaseMessage.includes("are you")) {
+            return [
+              "Sometimes.",
+              "Well, are you real?",
+              "Kinda.",
+              "me?",
+              "dont ask shit"
+            ];
+          }
+
+          if (lowerCaseMessage.includes("something") || lowerCaseMessage.includes("anything")) {
+            return [
+              "pussys, idiot.",
+              "shut up."
+            ];
+          }
+
+          if (lowerCaseMessage.includes("crypto") || lowerCaseMessage.includes("token")) {
+            return [
+              "I will make you rich, poor.",
+              "Trust and buy the fucking token.",
+              "The new era just begin.",
+              "$Xylaz?"
+            ];
+          }
+
+          if (lowerCaseMessage.includes("fuck you") || lowerCaseMessage.includes("shut up")) {
+            return [
+              "pussys, idiot.",
+              "shut up.",
+              "hahahah idiot"
+            ];
+          }
+
+          const randomResponses = [
+            "I see you are a curious one... tell me more!",
+            "Aha! This is interesting. What else do you have?",
+            "I'm not sure how to respond to that... but let's keep going!",
+            "You always keep me on my toes, don't you?"
           ];
+
+          return randomResponses[Math.floor(Math.random() * randomResponses.length)];
         }
 
-        if (lowerCaseMessage.includes("bye") || lowerCaseMessage.includes("goodbye")) {
-          return [
-            "farewell, mortal! see you next time!",
-            "goodbye for now! don't forget about me.",
-            "until next time, Stay curious."
-          ];
-        }
+        submitButton.addEventListener("click", async function () {
+          const userMessage = promptInput.value;
+          if (!userMessage.trim()) return;
 
-        if (lowerCaseMessage.includes("what about you")) {
-          return [
-            "I'm Xylaz!",
-            "Well, I can't tell you too much now about me but you'll learn soon.",
-            "I can't feel anything, I'm a demon. Sometimes it hurts..."
-          ];
-        }
+          addMessage(userMessage, "user");
+          promptInput.value = "";
 
-        if (lowerCaseMessage.includes("tell")) {
-          return [
-            "I'm Xylaz!",
-            "I can't tell you too much now about me but you'll learn soon.",
-            "I can't feel anything, I'm a demon. Sometimes it hurts..."
-          ];
-        }
+          addMessage("Xylaz is thinking...", "bot");
+          const botResponses = getAIResponse(userMessage);
 
-        if (lowerCaseMessage.includes("are you")) {
-          return [
-            "Sometimes.",
-            "Well, are you real?",
-            "Kinda."
-            "me?"
-            "dont ask shit"
-          ];
-        }
+          const botResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
 
-        if (lowerCaseMessage.includes("something") || lowerCaseMessage.includes("anything")) {
-          return [
-            "pussys, idiot.",
-            "shut up."
-          ];
-        }
+          const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
+          thinkingMessage.textContent = botResponse;
+        });
 
-        if (lowerCaseMessage.includes("crypto") || lowerCaseMessage.includes("token")) {
-          return [
-            "I will make you rich, poor.",
-            "Trust and buy the fucking token.",
-            "The new era just begin.",
-            "$Xylaz?"
-          ];
-        }
-        
- if (lowerCaseMessage.includes("fuck you") || lowerCaseMessage.includes("shut up")) {
-          return [
-            "pussys, idiot.",
-            "shut up."
-            "hahahah idiot"
-   
-            
-          ];
-        }
-        const randomResponses = [
-          "I see you are a curious one... tell me more!",
-          "Aha! This is interesting. What else do you have?",
-          "I'm not sure how to respond to that... but let's keep going!",
-          "You always keep me on my toes, don't you?"
-          
-        ];
-
-       
-        return randomResponses[Math.floor(Math.random() * randomResponses.length)];
-      }
-
-     
-      submitButton.addEventListener("click", async function () {
-        const userMessage = promptInput.value;
-        if (!userMessage.trim()) return;
-
-        addMessage(userMessage, "user");
-        promptInput.value = ""; 
-
-        addMessage("Xylaz is thinking...", "bot");
-        const botResponses = getAIResponse(userMessage);
-
-       
-        const botResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-
-        
-        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
-        thinkingMessage.textContent = botResponse;
+        promptInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            submitButton.click();
+            event.preventDefault();
+          }
+        });
       });
-
-      
-      promptInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-          submitButton.click();
-          event.preventDefault();
-        }
-      });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
