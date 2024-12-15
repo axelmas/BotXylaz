@@ -11,30 +11,26 @@ $(document).ready(function () {
         chatHistory.scrollTop(chatHistory[0].scrollHeight);
     }
 
-    // Función para obtener respuesta de la IA de Google Generative AI
+    // Función para obtener respuesta de la IA desde el servidor
     async function getAIResponse(userMessage) {
-        const apiKey = 'AIzaSyCIBVk3B2-hg_ZSjM5RU-r4SA5kfnVgdd8'; // Reemplaza con tu clave de API de Google Generative AI
-        const url = '"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCIBVk3B2-hg_ZSjM5RU-r4SA5kfnVgdd8; // En este caso, aquí deberías poner la URL para la API de Google o de tu servidor si usas uno
-        const body = JSON.stringify({
-            model: "gemini-1.5-flash",  // O el modelo que estés utilizando
-            prompt: userMessage,
-            maxOutputTokens: 150
-        });
-
         try {
-            const response = await fetch(url, {
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
                 },
-                body: body
+                body: JSON.stringify({ prompt: userMessage }),
             });
+
+            if (!response.ok) {
+                throw new Error("Error en la API del servidor");
+            }
+
             const data = await response.json();
-            addMessage(data.generatedText, "ai");  // Suponiendo que el modelo devuelve "generatedText"
+            addMessage(data.response, "ai");
         } catch (error) {
-            console.error("Error generating response:", error);
-            addMessage("I couldn't understand you, mortal.", "ai");
+            console.error("Error al obtener la respuesta del servidor:", error);
+            addMessage("No puedo responderte en este momento, mortal.", "ai");
         }
     }
 
@@ -46,7 +42,7 @@ $(document).ready(function () {
             addMessage(userMessage, "user"); // Muestra el mensaje del usuario
             promptInput.val(""); // Limpia el campo de entrada
 
-            // Obtiene la respuesta de la IA
+            // Obtiene la respuesta del servidor
             setTimeout(() => {
                 getAIResponse(userMessage);
             }, 500); // Retraso simulado para respuesta de la IA
