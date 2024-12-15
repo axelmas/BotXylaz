@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xylaz Bot</title>
-  <style>
-    /* Styles */
-    body {
-      font-family: monospace;
-      background-color: #121212;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
+<html>
+  <head>
+    <title>Xylaz Bot</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="chat-window">
+        <div class="chat-header">
+          <h2>Terminal</h2>
+        </div>
+        <div class="chat-history" id="chat-history">
+          
+        </div>
+        <div class="chat-input">
+          <input type="text" id="prompt" placeholder="...">
+          <button id="submit-btn">></button>
+        </div>
+      </div>
+    </div>
     .container {
       width: 90%;
       max-width: 600px;
