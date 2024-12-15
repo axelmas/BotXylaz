@@ -41,7 +41,7 @@
         const lowerCaseMessage = userMessage.toLowerCase().trim();
 
         
-        if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi")) {
+        if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("greetings")) {
           return [
             "Hello, mortal",
             "Greetings?",
@@ -74,7 +74,7 @@
           ];
         }
 
-        if (lowerCaseMessage.includes("tell me something")) {
+        if (lowerCaseMessage.includes("tell")) {
           return [
             "I'm Xylaz!",
             "I can't tell you too much now about me but you'll learn soon.",
@@ -82,7 +82,7 @@
           ];
         }
 
-        if (lowerCaseMessage.includes("are you real?")) {
+        if (lowerCaseMessage.includes("are you")) {
           return [
             "Sometimes.",
             "Well, are you real?",
@@ -90,7 +90,7 @@
           ];
         }
 
-        if (lowerCaseMessage.includes("like something") || lowerCaseMessage.includes("tell me anything")) {
+        if (lowerCaseMessage.includes("something") || lowerCaseMessage.includes("anything")) {
           return [
             "pussys, idiot.",
             "shut up."
@@ -111,6 +111,7 @@
           "Aha! This is interesting. What else do you have?",
           "I'm not sure how to respond to that... but let's keep going!",
           "You always keep me on my toes, don't you?"
+          
         ];
 
        
