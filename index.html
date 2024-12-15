@@ -7,7 +7,7 @@
   <style>
     /* Styles */
     body {
-      font-family: Arial, sans-serif;
+      font-family: monospace; /* Cambiar Arial por una fuente monoespaciada */
       background-color: #121212;
       color: #ffffff;
       margin: 0;
@@ -39,8 +39,8 @@
       border: 1px solid #00ff00;
       border-radius: 4px;
       background-color: #2b2b2b;
-      white-space: pre; /* Preserve ASCII art formatting */
-      font-family: monospace;
+      white-space: pre; /* Para preservar el formato ASCII */
+      font-family: monospace; /* Para que los caracteres se alineen correctamente */
     }
 
     .chat-message {
@@ -89,7 +89,7 @@
   <div class="container">
     <h2>Xylaz Bot</h2>
     <div class="chat-history" id="chat-history">
-      <!-- Messages will be dynamically added here -->
+      <!-- Los mensajes se agregarán dinámicamente aquí -->
     </div>
     <div class="chat-input">
       <input type="text" id="prompt" placeholder="Ask Xylaz something...">
@@ -103,17 +103,17 @@
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
-      // Function to add messages to the chat
+      // Función para agregar mensajes al chat
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message", messageClass);
         messageElement.textContent = message;
         chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Desplazamiento hacia abajo
       }
 
-      // Define ASCII Art responses
+      // Definir respuestas en ASCII art
       const asciiArtResponses = {
         "hello": `
   _   _      _ _
@@ -130,4 +130,65 @@
  |_|   |_| |_|_|\___|
         `,
         "how are you": `
- 
+  _   _           _       
+ | | | | ___  ___| |_ ___ 
+ | |_| |/ _ \/ __| __/ _ \\
+ |  _  |  __/ (__| ||  __/
+ |_| |_|\___|\___|\__\___|
+        `,
+        "default": `
+ __     ______  _    _   
+ \ \   / / __ \| |  | | 
+  \ \_/ / |  | | |  | |
+   \   /| |  | | |  | | 
+    | | | |__| | |__| | 
+    |_|  \____/ \____/  
+        `,
+        "game over": `
+ _____                   _____                                  
+|  __ \                 |  __ \                                 
+| |  | | ___   ___   ___| |  | | ___ _ __ ___  ___ _ __ ___   ___ 
+| |  | |/ _ \ / _ \ / _ \ |  | |/ _ \ '__/ _ \/ _ \ '_ \ _ \ / _ \
+| |__| |  __/ |  | |  __/ |__| |  __/ | |  __/  __/ | | | | | (_) |
+|_____/ \___|_|  |_|\___|_____/ \___|_|  \___|\___|_| |_| |_|\___/
+                                                                
+        `
+      };
+
+      // Función para simular la respuesta del bot utilizando ASCII art predefinido
+      async function getAIResponse(userMessage) {
+        const lowerCaseMessage = userMessage.toLowerCase().trim();
+        if (asciiArtResponses[lowerCaseMessage]) {
+          return asciiArtResponses[lowerCaseMessage];
+        } else {
+          return asciiArtResponses["default"]; // Devolver respuesta predeterminada si no hay coincidencias
+        }
+      }
+
+      // Manejar la entrada del usuario
+      submitButton.addEventListener("click", async function () {
+        const userMessage = promptInput.value;
+        if (!userMessage.trim()) return;
+
+        addMessage(userMessage, "user");
+        promptInput.value = ""; // Limpiar campo de entrada
+
+        addMessage("Xylaz is thinking...", "bot");
+        const botResponse = await getAIResponse(userMessage);
+
+        // Reemplazar el mensaje de "pensando" con la respuesta del bot
+        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
+        thinkingMessage.textContent = botResponse;
+      });
+
+      // Permitir presionar Enter para enviar el mensaje
+      promptInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          submitButton.click();
+          event.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
