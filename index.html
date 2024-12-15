@@ -1,89 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xylaz</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-  <div class="chat-window">
-    <div class="chat-header">
-      <h2>Xylaz</h2> <!-- Changed to Xylaz -->
-    </div>
-    <div class="chat-history" id="chat-history">
-      <!-- Messages will be dynamically added here -->
-    </div>
-    <div class="chat-input">
-      <input type="text" id="prompt" ascii-art="Speak, mortal."> <!-- Changed the placeholder -->
-      <button id="submit-btn">Send</button>
+  <div class="container">
+    <div class="chat-window">
+      <div class="chat-header">
+        <h2>Xylaz</h2>
+      </div>
+      <div class="chat-history" id="chat-history">
+        <!-- Messages will be dynamically added here -->
+      </div>
+      <div class="chat-input">
+        <input type="text" id="prompt" placeholder="Speak, degen."> <!-- Fixed the placeholder -->
+        <button id="submit-btn">Send</button>
+      </div>
     </div>
   </div>
-</div>
-public class AsciiArtExample {
-    public static void main(String[] args) {
-        System.out.println("   _____   ");
-        System.out.println("  /     \\  ");
-        System.out.println(" /       \\ ");
-        System.out.println("|   O   O  |");
-        System.out.println("|    \\_/   |");
-        System.out.println(" \\_______/  ");
-    }
-}
-<!-- jQuery Library -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function () {
-    const chatHistory = $("#chat-history");
-    const promptInput = $("#prompt");
-    const submitBtn = $("#submit-btn");
 
-    // Function to add messages to the chat history
-    function addMessage(message, sender) {
-      const messageClass = sender === "user" ? "user-message" : "ai-message";
-      const messageElement = `<div class="${messageClass}">${message}</div>`;
-      chatHistory.append(messageElement);
-      chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
-    }
+  <!-- jQuery Library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      const chatHistory = $("#chat-history");
+      const promptInput = $("#prompt");
+      const submitBtn = $("#submit-btn");
 
-    // Devil's responses (Xylaz)
-    function getAIResponse(userMessage) {
-      const responses = {
-        "hello": "Hello? Is this the best you can come up with, pathetic human?",
-        "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
-        "what are you doing": "Condemning souls... and dealing with your pointless chatter.",
-        "thanks": "Thanks? Hah. Save your gratitude, I don't need it.",
-        "bye": "Finally. Leave before I lose my temper.",
-      };
-
-      return (
-              responses[userMessage.toLowerCase()] ||
-              "."
-      );
-    }
-
-    // Handle message sending
-    submitBtn.on("click", function () {
-      const userMessage = promptInput.val().trim();
-
-      if (userMessage) {
-        addMessage(userMessage, "user"); // Display user's message
-        promptInput.val(""); // Clear the input field
-
-        // Show Xylaz's response after a short delay
-        setTimeout(() => {
-          const aiResponse = getAIResponse(userMessage); // Get the response
-          addMessage(aiResponse, "ai");
-        }, 500); // Simulated 500ms delay
+      // Function to add messages to the chat history
+      function addMessage(message, sender) {
+        const messageClass = sender === "user" ? "user-message" : "ai-message";
+        const messageElement = `<p class="${messageClass}">${message}</p>`;
+        chatHistory.append(messageElement);
+        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
       }
-    });
 
-    // Send message on pressing Enter
-    promptInput.on("keypress", function (e) {
-      if (e.which === 13) {
-        submitBtn.click();
+      // Xylaz's responses
+      function getAIResponse(userMessage) {
+        const responses = {
+          "hello": "Hello? Is this the best you can come up with, pathetic human?",
+          "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
+          "what are you doing": "Condemning souls... and dealing with your pointless chatter.",
+          "thanks": "Thanks? Hah. Save your gratitude, I don't need it.",
+          "bye": "Finally. Leave before I lose my temper.",
+        };
+
+        return responses[userMessage.toLowerCase()] || "What kind of nonsense is this? Speak clearly, mortal.";
       }
+
+      // Handle message sending
+      submitBtn.on("click", function () {
+        const userMessage = promptInput.val().trim();
+
+        if (userMessage) {
+          addMessage(userMessage, "user"); // Display user's message
+          promptInput.val(""); // Clear the input field
+
+          // Show Xylaz's response after a short delay
+          setTimeout(() => {
+            const aiResponse = getAIResponse(userMessage); // Get the response
+            addMessage(aiResponse, "ai");
+          }, 500); // Simulated 500ms delay
+        }
+      });
+
+      // Send message on pressing Enter
+      promptInput.on("keypress", function (e) {
+        if (e.which === 13) {
+          submitBtn.click();
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
