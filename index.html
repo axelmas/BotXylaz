@@ -14,10 +14,11 @@
           
         </div>
         <div class="chat-input">
-          <input type="text" id="prompt" Ask Xylaz something...="...">
+          <input type="text" id="prompt" placeholder="Ask Xylaz something...">
           <button id="submit-btn">></button>
         </div>
-    
+      </div>
+    </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -44,16 +45,16 @@
           return [
             "Hello, mortal",
             "Greetings?",
-            "Ah, a visitor! ", 
-            "degen",
+            "Ah, a visitor!",
+            "degen"
           ];
         }
 
         if (lowerCaseMessage.includes("how are you")) {
           return [
-            "hell!",
+            "hell yes nobody ask me that for a while...!",
             "yes, yes... good...",
-            "Feeling 'programmed, thanks for your knowledge"
+            "Feeling 'programmed', thanks for your knowledge"
           ];
         }
 
@@ -64,54 +65,51 @@
             "Until next time, user! Stay curious."
           ];
         }
-if (lowerCaseMessage.includes("what about you")) {
+
+        if (lowerCaseMessage.includes("what about you")) {
           return [
-            "im Xylaz!",
-            "well i cant tell you too much now about me but you gonna watch soon",
-            "Feeling 'programmed, thanks for your knowledge"
-            "i cant feel anything, im a demon
-            "sometimes it hurts..."
-];
-        }
-if (lowerCaseMessage.includes("tell me something")) {
-          return [
-            "im Xylaz!",
-            "well i cant tell you too much now about me but you gonna watch soon",
-            "Feeling 'programmed, thanks for your knowledge"
-            "i cant feel anything, im a demon
-            "sometimes it hurts..."
+            "I'm Xylaz!",
+            "Well, I can't tell you too much now about me but you'll learn soon.",
+            "I can't feel anything, I'm a demon. Sometimes it hurts..."
           ];
         }
-       if (lowerCaseMessage.includes("are you real?")) {
+
+        if (lowerCaseMessage.includes("tell me something")) {
           return [
-            "sometimes"
-            "well are you real?"
-            "kinda"
-         ];
-        }
-if (lowerCaseMessage.includes("like something")) {
-          return [
-"pussys, idiot"
-            "shut up"
-];
-        }
-   if (lowerCaseMessage.includes("crypto") || lowerCaseMessage.includes("token")) {
-          return [
-            "i will make you rich, poor"
-            "trust and buy the fucking token" ];
+            "I'm Xylaz!",
+            "I can't tell you too much now about me but you'll learn soon.",
+            "I can't feel anything, I'm a demon. Sometimes it hurts..."
+          ];
         }
 
-     
-    
+        if (lowerCaseMessage.includes("are you real?")) {
+          return [
+            "Sometimes.",
+            "Well, are you real?",
+            "Kinda."
+          ];
+        }
 
-      
-    
+        if (lowerCaseMessage.includes("like something")) {
+          return [
+            "pussys, idiot.",
+            "shut up."
+          ];
+        }
+
+        if (lowerCaseMessage.includes("crypto") || lowerCaseMessage.includes("token")) {
+          return [
+            "I will make you rich, poor.",
+            "Trust and buy the fucking token."
+          ];
+        }
+
         const randomResponses = [
           "I see you are a curious one... tell me more!",
           "Aha! This is interesting. What else do you have?",
           "I'm not sure how to respond to that... but let's keep going!",
           "You always keep me on my toes, don't you?"
-        ]; }
+        ];
 
         // Escoge una respuesta aleatoria
         return randomResponses[Math.floor(Math.random() * randomResponses.length)];
