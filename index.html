@@ -1,60 +1,164 @@
-$(document).ready(function () {
-  const chatHistory = $('#chat-history');
-  const promptInput = $('#prompt');
-  const submitButton = $('#submit-btn');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xylaz Bot</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Simple styles for the chat */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-  // Add messages to chat history
-  function addMessage(message, sender) {
-    const messageClass = sender === 'user' ? 'user-message' : 'ai-message';
-    const messageElement = `<p class="${messageClass}">${sender}: ${message}</p>`;
-    chatHistory.append(messageElement);
-    chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
-  }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: #1e1e1e;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 80vh;
+    }
 
-  // OpenAI API Response Function
-  async function getAIResponse(prompt) {
-    try {
-      const response = await fetch('http://localhost:3000/api/chat', { // Llamada a tu servidor backend
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt: prompt }), // Pasamos el mensaje al backend
-      });
+    .chat-history {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #00ff00;
+      border-radius: 4px;
+      background-color: #2b2b2b;
+    }
 
-      if (!response.ok) {
-        console.error('API error:', response.statusText);
-        return 'Xylaz encountered an issue.';
+    .chat-message {
+      margin: 5px 0;
+    }
+
+    .user-message {
+      text-align: right;
+      color: #00ff00;
+    }
+
+    .bot-message {
+      text-align: left;
+      color: #ffffff;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #00ff00;
+      border-radius: 4px;
+      background-color: #2b2b2b;
+      color: #ffffff;
+    }
+
+    .chat-input button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #00ff00;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background-color: #00cc00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Xylaz Bot</h2>
+    <div class="chat-history" id="chat-history">
+      <!-- Messages will be dynamically added here -->
+    </div>
+    <div class="chat-input">
+      <input type="text" id="prompt" placeholder="Ask Xylaz something...">
+      <button id="submit-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatHistory = document.getElementById("chat-history");
+      const promptInput = document.getElementById("prompt");
+      const submitButton = document.getElementById("submit-btn");
+
+      // Function to add messages to the chat
+      function addMessage(message, sender) {
+        const messageClass = sender === "user" ? "user-message" : "bot-message";
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", messageClass);
+        messageElement.textContent = message;
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
       }
 
-      const data = await response.json();
-      return data.response; // Respuesta del bot desde el backend
-    } catch (error) {
-      console.error('Fetch error:', error);
-      return 'Connection to Xylaz failed.';
-    }
-  }
+      // Function to fetch response from the backend
+      async function getAPIResponse(prompt) {
+        try {
+          const response = await fetch("https://your-backend-domain.com/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt: prompt }),
+          });
 
-  // Handle user input
-  submitButton.click(async function () {
-    const userMessage = promptInput.val();
-    if (!userMessage) return;
+          if (!response.ok) {
+            throw new Error("API Error: " + response.statusText);
+          }
 
-    addMessage(userMessage, 'user');
-    promptInput.val(''); // Clear input field
+          const data = await response.json();
+          return data.response; // Adjust based on your backend response structure
+        } catch (error) {
+          console.error("Error fetching API response:", error);
+          return "Xylaz encountered an issue. Please try again.";
+        }
+      }
 
-    addMessage('Xylaz is thinking...', 'bot');
-    const botResponse = await getAIResponse(userMessage);
+      // Handle user input
+      submitButton.addEventListener("click", async function () {
+        const userMessage = promptInput.value;
+        if (!userMessage.trim()) return;
 
-    // Replace the "thinking" message with the bot's response
-    chatHistory.find('p.ai-message').last().text(`Xylaz: ${botResponse}`);
-  });
+        addMessage(userMessage, "user");
+        promptInput.value = ""; // Clear input field
 
-  // Send message on Enter key press
-  promptInput.keypress(function (event) {
-    if (event.which === 13) {
-      event.preventDefault();
-      submitButton.click();
-    }
-  });
-});
+        addMessage("Xylaz is thinking...", "bot");
+        const botResponse = await getAPIResponse(userMessage);
+
+        // Replace the "thinking" message with the bot's response
+        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
+        thinkingMessage.textContent = botResponse;
+      });
+
+      // Allow pressing Enter to send the message
+      promptInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          submitButton.click();
+          event.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
