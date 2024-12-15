@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xylaz Bot</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    /* Styles */
     body {
-      font-family: monospace; /* Cambiar Arial por una fuente monoespaciada */
+      font-family: 'Courier New', Courier, monospace;
       background-color: #121212;
       color: #ffffff;
       margin: 0;
@@ -39,8 +39,6 @@
       border: 1px solid #00ff00;
       border-radius: 4px;
       background-color: #2b2b2b;
-      white-space: pre; /* Para preservar el formato ASCII */
-      font-family: monospace; /* Para que los caracteres se alineen correctamente */
     }
 
     .chat-message {
@@ -89,10 +87,10 @@
   <div class="container">
     <h2>Xylaz Bot</h2>
     <div class="chat-history" id="chat-history">
-  
+      <!-- Messages will be dynamically added here -->
     </div>
     <div class="chat-input">
-      <input type="text" id="prompt" placeholder="Ask, degen...">
+      <input type="text" id="prompt" placeholder="Ask Xylaz something...">
       <button id="submit-btn">Send</button>
     </div>
   </div>
@@ -103,60 +101,48 @@
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
-      // Función para agregar mensajes al chat
+      // Function to add messages to the chat
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message", messageClass);
         messageElement.textContent = message;
         chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Desplazamiento hacia abajo
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
       }
 
-      // Definir respuestas en ASCII art
-      const asciiArtResponses = {
-"We can talk after my launch": `
-        
-        "hello": `
-
-        "bye": `
-
-        "how are you": `
-
-        "default": `
-
-        `,
-        "game over": `
-
-      };
-
-      // Función para simular la respuesta del bot utilizando ASCII art predefinido
+      // Function to fetch response from the backend
       async function getAIResponse(userMessage) {
-        const lowerCaseMessage = userMessage.toLowerCase().trim();
-        if (asciiArtResponses[lowerCaseMessage]) {
-          return asciiArtResponses[lowerCaseMessage];
-        } else {
-          return asciiArtResponses["default"]; // Devolver respuesta predeterminada si no hay coincidencias
-        }
+        // Simulated demonic responses
+        const responses = [
+          "You dare speak to me? Foolish mortal, you shall regret this.",
+          "I can hear your soul screaming... it pleases me.",
+          "You think you can challenge me? You are but a speck in the abyss.",
+          "Begone, human, or face eternal suffering.",
+          "You are nothing but dust in the wind. Do you feel that? The void calls."
+        ];
+
+        // Return a random demonic response
+        return responses[Math.floor(Math.random() * responses.length)];
       }
 
-      // Manejar la entrada del usuario
+      // Handle user input
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
 
         addMessage(userMessage, "user");
-        promptInput.value = ""; // Limpiar campo de entrada
+        promptInput.value = ""; // Clear input field
 
         addMessage("Xylaz is thinking...", "bot");
         const botResponse = await getAIResponse(userMessage);
 
-        // Reemplazar el mensaje de "pensando" con la respuesta del bot
+        // Replace the "thinking" message with the bot's response
         const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
         thinkingMessage.textContent = botResponse;
       });
 
-      // Permitir presionar Enter para enviar el mensaje
+      // Allow pressing Enter to send the message
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
