@@ -26,21 +26,21 @@
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
-      // Función para agregar mensajes al chat
+    
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message", messageClass);
         messageElement.textContent = message;
         chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Desplazamiento hacia abajo
+        chatHistory.scrollTop = chatHistory.scrollHeight; 
       }
 
-      // Respuestas dinámicas según el mensaje del usuario
+      
       function getAIResponse(userMessage) {
         const lowerCaseMessage = userMessage.toLowerCase().trim();
 
-        // Respuestas predefinidas para algunas entradas comunes
+        
         if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi")) {
           return [
             "Hello, mortal",
@@ -113,30 +113,30 @@
           "You always keep me on my toes, don't you?"
         ];
 
-        // Escoge una respuesta aleatoria
+       
         return randomResponses[Math.floor(Math.random() * randomResponses.length)];
       }
 
-      // Manejar la entrada del usuario
+     
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
 
         addMessage(userMessage, "user");
-        promptInput.value = ""; // Limpiar campo de entrada
+        promptInput.value = ""; 
 
         addMessage("Xylaz is thinking...", "bot");
         const botResponses = getAIResponse(userMessage);
 
-        // Escoge una respuesta aleatoria si hay varias opciones
+       
         const botResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
 
-        // Reemplazar el mensaje de "pensando" con la respuesta del bot
+        
         const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
         thinkingMessage.textContent = botResponse;
       });
 
-      // Permitir presionar Enter para enviar el mensaje
+      
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
