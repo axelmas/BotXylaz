@@ -1,123 +1,171 @@
-/* General Body Styling */
-body {
+@charset "utf-8";
+/* CSS Document */
+
+*{
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', monospace;  /* Monospace for a terminal-like font */
-    background-color: #0d1a1e;  /* Dark background to simulate a terminal */
-    color: #00ff00;  /* Green text color */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;  /* Hide any overflow from scrolling */
 }
 
-/* Chat Window */
+body {
+    font-family: monospace;
+    background-color: #000000;
+}
+
 .container {
-    background: rgba(0, 0, 0, 0.8);  /* Darker container */
-    border: 2px solid #00ff00;  /* Green border */
-    border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 0 20px #00ff00;  /* Green glowing shadow */
+    width: 40%;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .chat-window {
-    display: flex;
-    flex-direction: column;
-    height: 500px;
+    border: 1px solid #00FF2B;
+    border-radius: 1px;
+    overflow: hidden;
+    animation: slide-in 1s ease;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
 .chat-header {
-    background-color: #003300;  /* Dark green header */
-    text-align: center;
+    background-color: #000000;
     padding: 10px;
-    font-size: 1.8rem;
-    color: #00ff00;
-    border-bottom: 2px solid #00ff00;
-    text-transform: uppercase;  /* All uppercase letters for a robotic feel */
+    color: #00FF2B;
+    text-align: left;
+    border: 1px solid #00FF2B;
+}
+
+.chat-header h1 {
+    font-size: 70px;
+    color: #444;
 }
 
 .chat-history {
-    flex: 1;
+    height: 750px;
     padding: 10px;
-    overflow-y: auto;
-    background: #1b2a2f;  /* Slightly lighter dark background */
-    border-bottom: 1px solid #00ff00;  /* Green border for the chat history */
-    font-size: 1rem;
-    color: #00ff00;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chat-history p {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #000000;
+    color: #00FF2B; /* Default color for user messages */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.chat-history p:last-child {
+    margin-bottom: 0;
+}
+
+/* Bot message color */
+.chat-history .bot-message {
+    color: #808080; /* Gray color for bot messages */
 }
 
 .chat-input {
     display: flex;
+    align-items: center;
     padding: 10px;
-    background-color: #003300;  /* Dark green input area */
+    animation: slide-up 1s ease;
 }
 
-.chat-input input {
-    flex: 1;
-    padding: 8px;
-    background-color: #1b2a2f;  /* Dark text box */
-    color: #00ff00;  /* Green text for input */
-    border: 1px solid #00ff00;  /* Green border */
-    border-radius: 5px 0 0 5px;
-    font-size: 1rem;
-    outline: none;  /* Remove default outline */
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
-.chat-input input:focus {
-    background-color: #003300;  /* Dark green when focused */
+.chat-input input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #00FF2B;
+    background-color: #000000;
+    font-family: monospace;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input input[type="text"]::placeholder {
+    color: #00FF2B;
 }
 
 .chat-input button {
-    padding: 8px 12px;
-    background-color: #00ff00;  /* Green button */
-    color: black;  /* Black text on the button */
-    border: none;
+    padding: 12px 22px;
+    background-color: #000000;
+    color: #00FF2B;
+    border: 1px solid #00FF2B;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 0 5px 5px 0;
-    font-size: 1rem;
-    text-transform: uppercase;
-    font-weight: bold;
+    margin-left: 10px;
+    font-family: monospace;
+    transition: background-color 0.2s ease;
 }
 
 .chat-input button:hover {
-    background-color: #00cc00;  /* Slightly darker green on hover */
+    background-color: #3e8e41;
 }
 
-/* Message Styling */
-.user-message {
-    text-align: right;
-    color: #00ff00;  /* Green text for the user */
-    margin: 5px 0;
-    font-family: 'Courier New', monospace;  /* Monospace for the user */
-    font-size: 1.1rem;
+.chat-input button:active {
+    background-color: #2f6e2f;
 }
 
-.ai-message {
-    text-align: left;
-    color: #00ff00;  /* Green text for Xylaz's message */
-    margin: 5px 0;
-    font-family: 'Courier New', monospace;  /* Monospace for the AI */
-    font-size: 1.1rem;
+.chat-input button.loading {
+    position: relative;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.chat-input button.loading:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    border-top-color: #4CAF50;
+    animation: spin 1s linear infinite;
 }
 
-.ai-message, .user-message {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-/* Adding a terminal blinking effect to the input */
-.chat-input input::placeholder {
-    color: #00ff00;
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-    50% {
-        opacity: 0;
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 10px;
     }
+    .chat-input {
+        flex-wrap: wrap;
+    }
+    .chat-input input[type="text"] {
+        margin-bottom: 10px;
+    }
+}
+
+@keyframes spin {
+    to {transform: rotate(360deg);}
 }
