@@ -1,81 +1,69 @@
-e<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xylaz</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <div class="chat-window">
-      <div class="chat-header">
-        <h2>Xylaz</h2>
-      </div>
-      <div class="chat-history" id="chat-history">
-        <!-- Messages will be dynamically added here -->
-      </div>
-      <div class="chat-input">
-        <input type="text" id="prompt" placeholder="Speak, degen."> <!-- Fixed the placeholder -->
-        <button id="submit-btn">Send</button>
-      </div>
-    </div>
-  </div>
+$(document).ready(function () {
+  const chatHistory = $('#chat-history');
+  const promptInput = $('#prompt');
+  const submitButton = $('#submit-btn');
 
-  <!-- jQuery Library -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      const chatHistory = $("#chat-history");
-      const promptInput = $("#prompt");
-      const submitBtn = $("#submit-btn");
+  // Add messages to chat history
+  function addMessage(message, sender) {
+    const messageClass = sender === 'user' ? 'user-message' : 'ai-message';
+    const messageElement = `<p class="${messageClass}">${sender}: ${message}</p>`;
+    chatHistory.append(messageElement);
+    chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+  }
 
-      // Function to add messages to the chat history
-      function addMessage(message, sender) {
-        const messageClass = sender === "user" ? "user-message" : "ai-message";
-        const messageElement = `<p class="${messageClass}">${message}</p>`;
-        chatHistory.append(messageElement);
-        chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
-      }
-
-      // Xylaz's responses
-      function getAIResponse(userMessage) {
-        const responses = {
-          "hello": "Hello? Is this the best you can come up with, pathetic human?",
-          "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
-          "what are you doing": "Condemning souls... and dealing with your pointless chatter.",
-          "thanks": "Thanks? Hah. Save your gratitude, I don't need it.",
-          "bye": "Finally. Leave before I lose my temper.",
-        };
-
-        return responses[userMessage.toLowerCase()] || " " "Hello? Is this the best you can come up with, pathetic human?",
-          "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
-         ."";
-      }
-
-      // Handle message sending
-      submitBtn.on("click", function () {
-        const userMessage = promptInput.val().trim();
-
-        if (userMessage) {
-          addMessage(userMessage, "user"); // Display user's message
-          promptInput.val(""); // Clear the input field
-
-          // Show Xylaz's response after a short delay
-          setTimeout(() => {
-            const aiResponse = getAIResponse(userMessage); // Get the response
-            addMessage(aiResponse, "ai");
-          }, 5000); // Simulated 500ms delay
-        }
+  // OpenAI API Response Function
+  async function getAIResponse(prompt) {
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            { role: 'system', content: 'You are Xylaz, a dark AI terminal that intimidates users.' },
+            { role: 'user', content: prompt },
+          ],
+          temperature: 0.9,
+          max_tokens: 150,
+        }),
       });
 
-      // Send message on pressing Enter
-      promptInput.on("keypress", function (e) {
-        if (e.which === 13) {
-          submitBtn.click();
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+      if (!response.ok) {
+        console.error('API error:', response.statusText);
+        return 'Xylaz encountered an issue.';
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content.trim();
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return 'Connection to Xylaz failed.';
+    }
+  }
+
+  // Handle user input
+  submitButton.click(async function () {
+    const userMessage = promptInput.val();
+    if (!userMessage) return;
+
+    addMessage(userMessage, 'user');
+    promptInput.val(''); // Clear input field
+
+    addMessage('Xylaz is thinking...', 'bot');
+    const botResponse = await getAIResponse(userMessage);
+
+    // Replace the "thinking" message with the bot's response
+    chatHistory.find('p.bot-message').last().text(`Xylaz: ${botResponse}`);
+  });
+
+  // Send message on Enter key press
+  promptInput.keypress(function (event) {
+    if (event.which === 13) {
+      event.preventDefault();
+      submitButton.click();
+    }
+  });
+});
