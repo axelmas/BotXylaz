@@ -1,98 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xylaz Bot</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Xylaz</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="chat-window">
-            <div class="chat-header">
-                <h2>Xylaz</h2>
-            </div>
-            <div class="chat-history" id="chat-history">
-                <!-- Messages will be dynamically added here -->
-            </div>
-            <div class="chat-input">
-                <input type="text" id="user-input" placeholder="Type, degen....">
-                <button id="submit-btn">Send</button>
-            </div>
-        </div>
+<div class="container">
+  <div class="chat-window">
+    <div class="chat-header">
+      <h2>Xylaz</h2> <!-- Changed to Xylaz -->
     </div>
+    <div class="chat-history" id="chat-history">
+      <!-- Messages will be dynamically added here -->
+    </div>
+    <div class="chat-input">
+      <input type="text" id="prompt" placeholder="Speak, mortal."> <!-- Changed the placeholder -->
+      <button id="submit-btn">Send</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-        const OPENAI_API_KEY = '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';
+<!-- jQuery Library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    const chatHistory = $("#chat-history");
+    const promptInput = $("#prompt");
+    const submitBtn = $("#submit-btn");
 
-        // Function to send message to OpenAI and get response
-        async function getBotResponse(userMessage) {
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-3.5-turbo', // Or use 'gpt-4' if you have access
-                        messages: [
-                            { role: 'system', content: 'You are an intelligent assistant who responds in English.' },
-                            { role: 'user', content: userMessage },
-                        ],
-                        max_tokens: 150,
-                        temperature: 0.7,
-                    }),
-                });
+    // Function to add messages to the chat history
+    function addMessage(message, sender) {
+      const messageClass = sender === "user" ? "user-message" : "ai-message";
+      const messageElement = `<div class="${messageClass}">${message}</div>`;
+      chatHistory.append(messageElement);
+      chatHistory.scrollTop(chatHistory[0].scrollHeight); // Auto-scroll to the bottom
+    }
 
-                if (!response.ok) {
-                    throw new Error('Error in API response');
-                }
+    // Devil's responses (Xylaz)
+    function getAIResponse(userMessage) {
+      const responses = {
+        "hello": "Hello? Is this the best you can come up with, pathetic human?",
+        "who are you": "I'm your worst nightmare. Don't ask questions you can't handle.",
+        "what are you doing": "Condemning souls... and dealing with your pointless chatter.",
+        "thanks": "Thanks? Hah. Save your gratitude, I don't need it.",
+        "bye": "Finally. Leave before I lose my temper.",
+      };
 
-                const data = await response.json();
-                console.log('OpenAI response:', data);
+      return (
+              responses[userMessage.toLowerCase()] ||
+              "What kind of nonsense is this? Speak clearly, mortal."
+      );
+    }
 
-                return data.choices[0].message.content.trim();
-            } catch (error) {
-                console.error('Error getting response from OpenAI:', error);
-                return 'Sorry, something went wrong.';
-            }
-        }
+    // Handle message sending
+    submitBtn.on("click", function () {
+      const userMessage = promptInput.val().trim();
 
-        document.getElementById("submit-btn").addEventListener("click", async function() {
-            const userMessage = document.getElementById("user-input").value.trim();
-            const chatHistory = document.getElementById("chat-history");
+      if (userMessage) {
+        addMessage(userMessage, "user"); // Display user's message
+        promptInput.val(""); // Clear the input field
 
-            if (userMessage) {
-                // Show user message
-                const userMessageElement = document.createElement("div");
-                userMessageElement.classList.add("user-message");
-                userMessageElement.textContent = userMessage;
-                chatHistory.appendChild(userMessageElement);
+        // Show Xylaz's response after a short delay
+        setTimeout(() => {
+          const aiResponse = getAIResponse(userMessage); // Get the response
+          addMessage(aiResponse, "ai");
+        }, 500); // Simulated 500ms delay
+      }
+    });
 
-                // Get response from OpenAI
-                const botResponse = await getBotResponse(userMessage);
-
-                // Show bot response
-                const botMessageElement = document.createElement("div");
-                botMessageElement.classList.add("bot-message");
-                botMessageElement.textContent = botResponse;
-                chatHistory.appendChild(botMessageElement);
-
-                // Clear the input field
-                document.getElementById("user-input").value = "";
-
-                // Scroll to the bottom to show the latest message
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }
-        });
-
-        // Send message by pressing "Enter"
-        document.getElementById("user-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                document.getElementById("submit-btn").click();
-            }
-        });
-    </script>
+    // Send message on pressing Enter
+    promptInput.on("keypress", function (e) {
+      if (e.which === 13) {
+        submitBtn.click();
+      }
+    });
+  });
+</script>
 </body>
 </html>
