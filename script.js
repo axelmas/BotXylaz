@@ -1,17 +1,12 @@
-require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
+// Cargar la clave API desde el archivo .env
+require('dotenv').config(); // Asegúrate de instalar dotenv primero
 
 $(document).ready(function () {
-  // Mostrar un mensaje de saludo cuando la página carga
+  // Mostrar un mensaje de saludo al cargar la página
   $('#chat-history').append('<p>I am Xylaz...</p>');
 
-  // Cargar la clave API desde el archivo .env
+  // Configuración de la API de OpenAI
   const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    console.error('API Key not found. Please set it in your .env file.');
-    $('#chat-history').append('<p class="error">Error: API Key not configured.</p>');
-    return;
-  }
 
   // Función para interactuar con OpenAI
   async function getAIResponse(prompt) {
@@ -22,7 +17,7 @@ $(document).ready(function () {
         Authorization: Bearer ${apiKey},
       },
       body: JSON.stringify({
-        model: 'gpt-4', // Modelo que deseas utilizar
+        model: 'gpt-4',
         messages: [
           { role: 'system', content: 'You are Xylaz, a war hero AI that only speaks darkly and directly. You exist in a terminal and often challenge the user.' },
           { role: 'user', content: prompt },
