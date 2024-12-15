@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xylaz Bot</title>
-  <link rel="stylesheet" href="style.css">
   <style>
+    /* Styles */
     body {
-      font-family: 'Courier New', Courier, monospace;
+      font-family: monospace;
       background-color: #121212;
       color: #ffffff;
       margin: 0;
@@ -39,6 +39,8 @@
       border: 1px solid #00ff00;
       border-radius: 4px;
       background-color: #2b2b2b;
+      white-space: pre; /* Para preservar el formato ASCII */
+      font-family: monospace; /* Para que los caracteres se alineen correctamente */
     }
 
     .chat-message {
@@ -82,13 +84,12 @@
       background-color: #00cc00;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/figlet@1.5.0/js/figlet.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h2 id="bot-name">Xylaz Bot</h2>
+    <h2>Xylaz Bot</h2>
     <div class="chat-history" id="chat-history">
-      <!-- Messages will be dynamically added here -->
+      <!-- Los mensajes se agregarán dinámicamente aquí -->
     </div>
     <div class="chat-input">
       <input type="text" id="prompt" placeholder="Ask Xylaz something...">
@@ -101,76 +102,85 @@
       const chatHistory = document.getElementById("chat-history");
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
-      const botNameElement = document.getElementById("bot-name");
 
-      // Function to add messages to the chat
+      // Función para agregar mensajes al chat
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message", messageClass);
         messageElement.textContent = message;
         chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Desplazamiento hacia abajo
       }
 
-      // Function to fetch response from the backend
-      async function getAIResponse(userMessage) {
-        // Simulated demonic responses
-        const responses = [
-          "You dare speak to me? Foolish mortal, you shall regret this.",
-          "I can hear your soul screaming... it pleases me.",
-          "You think you can challenge me? You are but a speck in the abyss.",
-          "Begone, human, or face eternal suffering.",
-          "You are nothing but dust in the wind. Do you feel that? The void calls."
-          "you can call me Xylaz"
+      // Respuestas dinámicas según el mensaje del usuario
+      function getAIResponse(userMessage) {
+        const lowerCaseMessage = userMessage.toLowerCase().trim();
+
+        // Respuestas predefinidas para algunas entradas comunes
+        if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi")) {
+          return [
+            "Hello, mortal! How can I assist you today?",
+            "Greetings, user! What brings you here?",
+            "Ah, a visitor! How can I help you today?"
+          ];
+        }
+
+        if (lowerCaseMessage.includes("how are you")) {
+          return [
+            "I'm doing as well as a bot can be. Thanks for asking!",
+            "I'm great, as usual! Ready to assist.",
+            "Feeling 'programmed'! How can I help you?"
+          ];
+        }
+
+        if (lowerCaseMessage.includes("bye") || lowerCaseMessage.includes("goodbye")) {
+          return [
+            "Farewell, mortal! See you next time!",
+            "Goodbye for now! Don't forget about me.",
+            "Until next time, user! Stay curious."
+          ];
+        }
+
+        // Respuesta cuando no se encuentra una coincidencia
+        const randomResponses = [
+          "I see you are a curious one... tell me more!",
+          "Aha! This is interesting. What else do you have?",
+          "I'm not sure how to respond to that... but let's keep going!",
+          "You always keep me on my toes, don't you?"
         ];
 
-        // Return a random demonic response
-        return responses[Math.floor(Math.random() * responses.length)];
+        // Escoge una respuesta aleatoria
+        return randomResponses[Math.floor(Math.random() * randomResponses.length)];
       }
 
-      // Function to change bot's name to ASCII art
-      function setBotNameToAsciiArt() {
-        figlet('Xylaz Bot', function(err, data) {
-          if (err) {
-            console.log('Something went wrong...');
-            return;
-          }
-          botNameElement.textContent = '';  // Clear existing text
-          const pre = document.createElement('pre');
-          pre.textContent = data;  // ASCII Art
-          botNameElement.appendChild(pre);  // Add ASCII Art to the bot name element
-        });
-      }
-
-      // Handle user input
+      // Manejar la entrada del usuario
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
 
         addMessage(userMessage, "user");
-        promptInput.value = ""; // Clear input field
+        promptInput.value = ""; // Limpiar campo de entrada
 
         addMessage("Xylaz is thinking...", "bot");
-        const botResponse = await getAIResponse(userMessage);
+        const botResponses = getAIResponse(userMessage);
 
-        // Replace the "thinking" message with the bot's response
+        // Escoge una respuesta aleatoria si hay varias opciones
+        const botResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+
+        // Reemplazar el mensaje de "pensando" con la respuesta del bot
         const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
         thinkingMessage.textContent = botResponse;
       });
 
-      // Allow pressing Enter to send the message
+      // Permitir presionar Enter para enviar el mensaje
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
           event.preventDefault();
         }
       });
-
-      // Set the bot's name to ASCII art on load
-      setBotNameToAsciiArt();
     });
   </script>
 </body>
 </html>
-
