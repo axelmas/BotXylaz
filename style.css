@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -10,6 +10,7 @@
 body {
     font-family: monospace;
     background-color: #000000;
+    color: #00FF2B;
 }
 
 .container {
@@ -102,17 +103,17 @@ body {
     flex-grow: 1;
     padding: 10px;
     border-radius: 5px;
-    border: none;
+    border: 1px solid #00FF2B; /* Añadido un borde para mayor visibilidad */
     outline: none;
     font-size: 15px;
-    color: #00FF2B;
-    background-color: #000000;
+    color: #00FF2B !important; /* Garantiza que el texto sea verde */
+    background-color: #000000 !important; /* Fondo negro */
     font-family: monospace;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .chat-input input[type="text"]::placeholder {
-    color: #00FF2B;
+    color: #444; /* Placeholder gris para contraste */
 }
 
 .chat-input button {
@@ -167,5 +168,5 @@ body {
 }
 
 @keyframes spin {
-    to {transform: rotate(360deg);}
+    to { transform: rotate(360deg); }
 }
