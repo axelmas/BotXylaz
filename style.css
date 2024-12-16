@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 .user-message {
     text-align: right;
     background-color: #e1ffc7;
@@ -5,6 +7,7 @@
     border-radius: 10px;
     margin: 5px;
 }
+
 .ai-message {
     text-align: left;
     background-color: #f1f0f0;
@@ -49,8 +52,8 @@ body {
 .chat-history {
     height: 750px;
     padding: 10px;
-    overflow-y: scroll;
-    scrollbar-width: none;
+    overflow-y: auto; /* Ajustado */
+    scrollbar-width: none; /* Si prefieres no ver la barra */
 }
 
 .chat-history p {
@@ -100,3 +103,14 @@ body {
     cursor: pointer;
     margin-left: 10px;
 }
+
+/* Definición de la animación slide-in */
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
