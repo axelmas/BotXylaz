@@ -14,7 +14,12 @@ $(document).ready(function () {
     // Función para obtener la respuesta de la IA
     async function getAIResponse(userMessage) {
         try {
-            const response = await fetch('/api/chat', {
+            // Verifica si estás en producción o en desarrollo y ajusta la URL
+            const baseUrl = window.location.hostname === "xylazbot.xyz" 
+                            ? "https://xylazbot.xyz" 
+                            : "http://localhost:3000";  // Aquí puedes ajustar la URL según tu entorno
+
+            const response = await fetch(`${baseUrl}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,7 +35,7 @@ $(document).ready(function () {
             addMessage(data.response, "ai"); // Asegúrate de que 'response' es lo que devuelve tu servidor
         } catch (error) {
             console.error("Error al obtener la respuesta del servidor:", error);
-            addMessage("No puedo responderte en este momento, mortal.", "ai"); // Mensaje de error
+            addMessage("Dont talk to me, mortal.", "ai"); // Mensaje de error
         }
     }
 
@@ -53,3 +58,4 @@ $(document).ready(function () {
         }
     });
 });
+
