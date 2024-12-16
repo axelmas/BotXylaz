@@ -70,26 +70,4 @@
       }
 
       // Verificar que los elementos existan antes de añadir los event listeners
-      const submitButton = $('#submit-btn');
-      const userInput = $('#user-input');
-
-      if (submitButton.length && userInput.length) {
-        // Evento de click en el botón de enviar
-        submitButton.click(function () {
-          sendMessage();
-        });
-
-        // Enviar mensaje al presionar Enter
-        userInput.keydown(function (event) {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            sendMessage();
-          }
-        });
-      } else {
-        console.error('El botón de enviar o el campo de entrada no existen en el DOM');
-      }
-    });
-  </script>
-</body>
-</html>
+      const submitButton = $('
