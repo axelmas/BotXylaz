@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xylaz Bot</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <div class="chat-window">
-      <div class="chat-header">
-        <h2>Xylaz</h2>
-      </div>
-      <div class="chat-history" id="chat-history"></div>
-      <div class="chat-input">
-        <input type="text" id="prompt" placeholder="Ask, degen...">
-        <button id="submit-btn">></button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
       const chatHistory = document.getElementById("chat-history");
       const promptInput = document.getElementById("prompt");
@@ -40,18 +17,17 @@
       // Función para obtener la respuesta de la IA
       async function getAIResponse(userMessage) {
         try {
-          // Verifica si estás en producción o en desarrollo y ajusta la URL
+          // Aquí solo se declara baseUrl una vez
           const baseUrl = window.location.hostname === "xylazbot.xyz" 
                           ? "https://xylazbot.xyz" 
-                          : "http://localhost:3000";  // Aquí puedes ajustar la URL según tu entorno
+                          : "http://localhost:3000";  // Ajuste según tu entorno
 
-          const baseUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : "https://xylazbot.xyz";
-
-const response = await fetch(`${baseUrl}/api/chat`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt: userMessage }),
-});
+          const response = await fetch(`${baseUrl}/api/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: userMessage }),
+          });
+          
           const data = await response.json();
           return data.response || "Sorry, I am experiencing some issues.";  // Cambio de 'message' a 'response'
         } catch (error) {
@@ -81,7 +57,4 @@ const response = await fetch(`${baseUrl}/api/chat`, {
         }
       });
     });
-  </script>
-</body>
-</html>
-
+</script>
