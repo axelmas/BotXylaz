@@ -2,18 +2,20 @@
 
 .user-message {
     text-align: right;
-    background-color: #e1ffc7;
+    background-color: transparent;  /* Cambiado a transparente */
     padding: 10px;
     border-radius: 10px;
     margin: 5px;
+    color: #00FF2B;  /* Color verde para el texto */
 }
 
 .ai-message {
     text-align: left;
-    background-color: #f1f0f0;
+    background-color: transparent;  /* Cambiado a transparente */
     padding: 10px;
     border-radius: 10px;
     margin: 5px;
+    color: #FF0000;  /* Color rojo para el texto */
 }
 
 * {
@@ -113,4 +115,3 @@ body {
         transform: translateX(0);
     }
 }
-
