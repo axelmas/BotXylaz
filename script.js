@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xylaz Bot</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -12,83 +12,69 @@
       <div class="chat-header">
         <h2>Xylaz</h2>
       </div>
-      <div id="chat-history"></div>
+      <div class="chat-history" id="chat-history"></div>
       <div class="chat-input">
-        <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-        <button id="submit-btn">Enviar</button>
+        <input type="text" id="prompt" placeholder="Ask, degen...">
+        <button id="submit-btn">></button>
       </div>
     </div>
   </div>
 
   <script>
-    $(document).ready(function () {
-      // Mensaje inicial
-      $('#chat-history').append('<p>Xylaz...</p>');
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatHistory = document.getElementById("chat-history");
+      const promptInput = document.getElementById("prompt");
+      const submitButton = document.getElementById("submit-btn");
 
-      // Función para obtener la respuesta del backend
-      async function getAIResponse(prompt) {
+     
+      function addMessage(message, sender) {
+        const messageClass = sender === "user" ? "user-message" : "bot-message";
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", messageClass);
+        messageElement.textContent = message;
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+     
+      async function getAIResponse(userMessage) {
         try {
-          // Definir baseUrl con if-else
-          let baseUrl;
-          if (window.location.hostname === 'xylazbot.xyz') {
-            baseUrl = 'https://xylazbot.xyz';
-          } else {
-            baseUrl = 'http://localhost:3000';
-          }
-
-          const response = await fetch(`${baseUrl}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt }),
+          const response = await fetch("/api/chat", {  // La ruta debe coincidir con la del backend
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: userMessage }),
           });
 
-          if (!response.ok) {
-            console.error('Error:', response.statusText);
-            return 'Hubo un problema con la solicitud. Inténtalo de nuevo.';
-          }
-
           const data = await response.json();
-          return data.response || 'Error en la respuesta del servidor';
+          return data.response || "Sorry, I am experiencing some issues."; // Cambié 'message' a 'response'
         } catch (error) {
-          console.error('Error al conectar con el backend:', error);
-          return 'Ocurrió un error al procesar tu solicitud.';
+          console.error("Error fetching AI response:", error);
+          return "An error occurred. Please try again.";
         }
       }
 
-      // Función para enviar el mensaje
-      async function sendMessage() {
-        const userMessage = $('#user-input').val().trim();
-        if (!userMessage) return;
+      // Cuando el usuario haga clic en el botón de enviar
+      submitButton.addEventListener("click", async function () {
+        const userMessage = promptInput.value;
+        if (!userMessage.trim()) return;
 
-        $('#chat-history').append(`<p class="user-message">You: ${userMessage}</p>`);
-        $('#user-input').val('');
-        $('#chat-history').append('<p class="bot-message">Xylaz is typing...</p>');
+        addMessage(userMessage, "user");
+        promptInput.value = "";
 
+        addMessage("Xylaz say...", "bot");
         const botResponse = await getAIResponse(userMessage);
-        const lastBotMessage = $('#chat-history p.bot-message');
-        lastBotMessage.text(`Xylaz: ${botResponse}`);
-      }
 
-      // Verificar que los elementos existan antes de añadir los event listeners
-      const submitButton = $('#submit-btn');
-      const userInput = $('#user-input');
+        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
+        thinkingMessage.textContent = `Xylaz: ${botResponse}`;
+      });
 
-      if (submitButton.length && userInput.length) {
-        // Evento de click en el botón de enviar
-        submitButton.click(function () {
-          sendMessage();
-        });
-
-        // Enviar mensaje al presionar Enter
-        userInput.keydown(function (event) {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            sendMessage();
-          }
-        });
-      } else {
-        console.error('El botón de enviar o el campo de entrada no existen en el DOM');
-      }
+      // Enviar mensaje al presionar Enter
+      promptInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          submitButton.click();
+          event.preventDefault();
+        }
+      });
     });
   </script>
 </body>
