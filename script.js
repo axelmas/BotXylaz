@@ -4,7 +4,7 @@ $(document).ready(function () {
   async function getAIResponse(prompt) {
     try {
       // Cambiar la URL a la de tu backend
-      const response = await fetch('http://localhost:3000/api/chat', {
+      const response = await fetch('https://xylazbot.xyz/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
