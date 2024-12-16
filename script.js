@@ -10,17 +10,17 @@ $(document).ready(function () {
 
   const { Configuration, OpenAIApi } = require('openai');
 
-// Accede a la clave desde las variables de entorno
+
 const apiKey = process.env.OPENAI_API_KEY;
 
-// Configura la API de OpenAI
+
 const configuration = new Configuration({
   apiKey: apiKey,
 });
 
 const openai = new OpenAIApi(configuration);
 
-// Función para interactuar con OpenAI
+
 async function callOpenAI(prompt) {
   try {
     const response = await openai.createChatCompletion({
@@ -47,7 +47,7 @@ callOpenAI("hey, how are you");
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
-          { role: 'system', content: 'You are Xylaz, a war hero AI that only speaks darkly and directly. You exist in a terminal and often challenge the user.' },
+          { role: 'system', content: 'You are Xylaz, a war hero and demoN also AI that only speaks darkly and directly. You exist in a terminal and often challenge the user.' },
           { role: 'user', content: prompt },
         ],
         temperature: 1,
