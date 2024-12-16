@@ -28,14 +28,15 @@ $(document).ready(function () {
             });
 
             if (!response.ok) {
-                throw new Error("Error en la API del servidor");
+                // Mostrar el código de error y el texto
+                throw new Error(`Error en la API del servidor: ${response.status} - ${response.statusText}`);
             }
 
             const data = await response.json();
             addMessage(data.response, "ai"); // Asegúrate de que 'response' es lo que devuelve tu servidor
         } catch (error) {
             console.error("Error al obtener la respuesta del servidor:", error);
-            addMessage("Dont talk to me, mortal.", "ai"); // Mensaje de error
+            addMessage("I can't process that right now, mortal.", "ai"); // Mensaje de error
         }
     }
 
@@ -52,10 +53,10 @@ $(document).ready(function () {
     });
 
     // Event listener para enviar el mensaje al presionar Enter
-    promptInput.on("keypress", function (e) {
-        if (e.which === 13) {
-            submitBtn.click();
+    promptInput.on("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevenir el comportamiento predeterminado
+            submitBtn.click(); // Hacer clic en el botón de enviar
         }
     });
 });
-
