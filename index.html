@@ -19,59 +19,61 @@
       </div>
     </div>
   </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const chatHistory = document.getElementById("chat-history");
-        const promptInput = document.getElementById("prompt");
-        const submitButton = document.getElementById("submit-btn");
 
-        function addMessage(message, sender) {
-          const messageClass = sender === "user" ? "user-message" : "bot-message";
-          const messageElement = document.createElement("div");
-          messageElement.classList.add("chat-message", messageClass);
-          messageElement.textContent = message;
-          chatHistory.appendChild(messageElement);
-          chatHistory.scrollTop = chatHistory.scrollHeight;
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatHistory = document.getElementById("chat-history");
+      const promptInput = document.getElementById("prompt");
+      const submitButton = document.getElementById("submit-btn");
+
+      function addMessage(message, sender) {
+        const messageClass = sender === "user" ? "user-message" : "bot-message";
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", messageClass);
+        messageElement.textContent = message;
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+      async function getAIResponse(userMessage) {
+        try {
+          const response = await fetch("/api/chat", {  // Ruta actualizada
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: userMessage }),
+          });
+
+          const data = await response.json();
+          return data.response || "Sorry, I am experiencing some issues.";  // Cambio de 'message' a 'response'
+        } catch (error) {
+          console.error("Error fetching AI response:", error);
+          return "I will be ready in 12 hours."; // Mensaje en caso de error
         }
+      }
 
-        async function getAIResponse(userMessage) {
-          try {
-            const response = await fetch("/api/chat", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ prompt: userMessage }),
-            });
+      submitButton.addEventListener("click", async function () {
+        const userMessage = promptInput.value;
+        if (!userMessage.trim()) return;
 
-            const data = await response.json();
-            return data.message || "Sorry, I am experiencing some issues.";
-          } catch (error) {
-            console.error("Error fetching AI response:", error);
-            return "I will be ready in 12 hours.";
-          }
-        }
+        addMessage(userMessage, "user");
+        promptInput.value = "";
 
-        submitButton.addEventListener("click", async function () {
-          const userMessage = promptInput.value;
-          if (!userMessage.trim()) return;
+        addMessage("Xylaz is thinking...", "bot");
+        const botResponse = await getAIResponse(userMessage);
 
-          addMessage(userMessage, "user");
-          promptInput.value = "";
-
-          addMessage("Xylaz is thinking...", "bot");
-          const botResponse = await getAIResponse(userMessage);
-
-          const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
-          thinkingMessage.textContent = botResponse;
-        });
-
-        promptInput.addEventListener("keypress", function (event) {
-          if (event.key === "Enter") {
-            submitButton.click();
-            event.preventDefault();
-          }
-        });
+        const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
+        thinkingMessage.textContent = botResponse;
       });
-    </script>
-  </body>
+
+      promptInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          submitButton.click();
+          event.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
+
