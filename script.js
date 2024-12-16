@@ -1,60 +1,28 @@
 $(document).ready(function () {
   $('#chat-history').append('<p>Xylaz...</p>');
 
-  // Usar la clave API desde el entorno, pero esto solo debería estar en el servidor.
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  // Si estás trabajando con Node.js en un servidor, puedes usar 'openai' como se muestra
-  const { Configuration, OpenAIApi } = require('openai');
-
-  const configuration = new Configuration({
-    apiKey: apiKey,
-  });
-
-  const openai = new OpenAIApi(configuration);
-
-  async function callOpenAI(prompt) {
+  async function getAIResponse(prompt) {
     try {
-      const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo", // o "gpt-4" si tienes acceso
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 100,
+      // Cambiar la URL a la de tu backend
+      const response = await fetch('http://localhost:3000/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }), // Enviar solo el prompt al backend
       });
 
-      console.log("Respuesta de OpenAI:", response.data.choices[0].message.content);
+      if (!response.ok) {
+        console.error('Error:', response.statusText);
+        return 'Hubo un problema con la solicitud. Inténtalo de nuevo.';
+      }
+
+      const data = await response.json();
+      return data.response; // Devuelve la respuesta del backend
     } catch (error) {
-      console.error("Error al llamar a la API de OpenAI:", error.message);
+      console.error('Error al conectar con el backend:', error);
+      return 'Ocurrió un error al procesar tu solicitud.';
     }
-  }
-
-  // Prueba la función
-  callOpenAI("hey, how are you");
-
-  async function getAIResponse(prompt) {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-4',
-        messages: [
-          { role: 'system', content: 'You are Xylaz, a war hero and demoN also AI that only speaks darkly and directly. You exist in a terminal and often challenge the user.' },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 1,
-        max_tokens: 150,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error:', response.statusText);
-      return 'I cannot process your request.';
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content.trim();
   }
 
   $('#send-button').click(async function () {
@@ -77,3 +45,4 @@ $(document).ready(function () {
     }
   });
 });
+
