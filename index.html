@@ -1,5 +1,29 @@
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xylaz Bot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="chat-window">
+      <div class="chat-header">
+        <h2>Xylaz</h2>
+      </div>
+      <div class="chat-history" id="chat-history"></div>
+      <div class="chat-input">
+        <input type="text" id="prompt" placeholder="Ask, degen...">
+        <button id="submit-btn">></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Usamos jQuery $(document).ready para garantizar que el DOM esté listo
+    $(document).ready(function () {
       const chatHistory = document.getElementById("chat-history");
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
@@ -17,7 +41,7 @@
       // Función para obtener la respuesta de la IA
       async function getAIResponse(userMessage) {
         try {
-          // Aquí solo se declara baseUrl una vez
+          // Aquí solo se declara baseUrl una vez, sin duplicados
           const baseUrl = window.location.hostname === "xylazbot.xyz" 
                           ? "https://xylazbot.xyz" 
                           : "http://localhost:3000";  // Ajuste según tu entorno
@@ -27,7 +51,11 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
           });
-          
+
+          if (!response.ok) {
+            throw new Error('Error al conectar con el backend');
+          }
+
           const data = await response.json();
           return data.response || "Sorry, I am experiencing some issues.";  // Cambio de 'message' a 'response'
         } catch (error) {
@@ -36,6 +64,7 @@
         }
       }
 
+      // Agregar evento de clic al botón
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
@@ -50,11 +79,15 @@
         thinkingMessage.textContent = botResponse;
       });
 
+      // Agregar evento de tecla para enviar mensaje con Enter
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
-          event.preventDefault();
+          event.preventDefault(); // Evitar que se envíe el formulario al presionar Enter
         }
       });
     });
-</script>
+  </script>
+</body>
+</html>
+
