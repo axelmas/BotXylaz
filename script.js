@@ -39,12 +39,13 @@ $(document).ready(function () {
     const botResponse = await getAIResponse(userMessage);
 
     // Reemplazar el mensaje de "Xylaz is typing..." por la respuesta real
-    $('#chat-history p.bot-message').last().text(`Xylaz: ${botResponse}`);
+    const lastBotMessage = $('#chat-history p.bot-message');
+    lastBotMessage.text(`Xylaz: ${botResponse}`);
   });
 
   // Enviar mensaje al presionar Enter
   $('#user-input').keypress(function (event) {
-    if (event.which === 13) { // Verifica si la tecla presionada es Enter (13)
+    if (event.key === 'Enter') { // Usar 'Enter' en lugar de 13 para mayor claridad
       event.preventDefault(); // Evitar que se envíe el formulario (si es que existe uno)
       $('#send-button').click(); // Hacer clic en el botón de enviar
     }
