@@ -45,12 +45,13 @@
                           ? "https://xylazbot.xyz" 
                           : "http://localhost:3000";  // Aquí puedes ajustar la URL según tu entorno
 
-          const response = await fetch(`${baseUrl}/api/chat`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: userMessage }),
-          });
+          const baseUrl = window.location.hostname === "localhost" ? "http://localhost:3000" : "https://xylazbot.xyz";
 
+const response = await fetch(`${baseUrl}/api/chat`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt: userMessage }),
+});
           const data = await response.json();
           return data.response || "Sorry, I am experiencing some issues.";  // Cambio de 'message' a 'response'
         } catch (error) {
