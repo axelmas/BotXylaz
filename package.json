@@ -4,7 +4,7 @@
   "description": "Backend para el bot Xylaz",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.mjs"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
