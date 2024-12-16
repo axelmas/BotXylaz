@@ -5,7 +5,7 @@ $(document).ready(function () {
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
-      // Asignar baseUrl una sola vez
+      // Determinar baseUrl según el entorno
       const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
 
       // Realizar la solicitud POST
@@ -34,8 +34,8 @@ $(document).ready(function () {
 
   // Función para enviar el mensaje
   async function sendMessage() {
-    const userMessage = $('#user-input').val().trim(); // Trim para eliminar espacios
-    if (!userMessage) return; // Si no hay mensaje, no hace nada
+    const userMessage = $('#user-input').val().trim(); // Eliminar espacios innecesarios
+    if (!userMessage) return; // Si no hay mensaje, no hacer nada
 
     $('#chat-history').append(`<p class="user-message">You: ${userMessage}</p>`);
     $('#user-input').val(''); // Limpiar el campo de entrada
@@ -61,4 +61,3 @@ $(document).ready(function () {
     }
   });
 });
-
