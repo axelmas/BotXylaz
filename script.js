@@ -5,7 +5,7 @@ $(document).ready(function () {
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
-      // Condicional para asignar baseUrl solo una vez
+      // Asignar baseUrl una sola vez
       const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
 
       // Realizar la solicitud POST
@@ -49,7 +49,9 @@ $(document).ready(function () {
   }
 
   // Evento de click en el botón de enviar
-  $('#send-button').click(sendMessage);
+  $('#send-button').click(function () {
+    sendMessage();
+  });
 
   // Enviar mensaje al presionar Enter
   $('#user-input').keypress(function (event) {
@@ -59,3 +61,4 @@ $(document).ready(function () {
     }
   });
 });
+
