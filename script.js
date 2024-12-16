@@ -5,7 +5,7 @@ $(document).ready(function () {
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
-      // Cambiar la URL a la de tu backend (asegurarse de que esté correctamente configurado)
+      // Condicional para asignar baseUrl solo una vez
       const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
 
       // Realizar la solicitud POST
