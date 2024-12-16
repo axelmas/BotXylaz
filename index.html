@@ -30,7 +30,7 @@
       async function getAIResponse(prompt) {
         try {
           const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
-          const response = await fetch(`${baseUrl}/api/chat`, {
+          const response = await fetch(`${localhost:3000}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt }),
