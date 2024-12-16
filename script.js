@@ -5,8 +5,10 @@ $(document).ready(function () {
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
-      // Cambiar la URL a la de tu backend
+      // Cambiar la URL a la de tu backend (asegurarse de que esté correctamente configurado)
       const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
+
+      // Realizar la solicitud POST
       const response = await fetch(`${baseUrl}/api/chat`, {
         method: 'POST',
         headers: {
@@ -15,13 +17,15 @@ $(document).ready(function () {
         body: JSON.stringify({ prompt }), // Enviar solo el prompt al backend
       });
 
+      // Comprobar si la respuesta es válida
       if (!response.ok) {
         console.error('Error:', response.statusText);
         return 'Hubo un problema con la solicitud. Inténtalo de nuevo.';
       }
 
+      // Parsear y devolver la respuesta
       const data = await response.json();
-      return data.response; // Devuelve la respuesta del backend
+      return data.response || 'Error en la respuesta del servidor';
     } catch (error) {
       console.error('Error al conectar con el backend:', error);
       return 'Ocurrió un error al procesar tu solicitud.';
@@ -55,4 +59,3 @@ $(document).ready(function () {
     }
   });
 });
-
