@@ -33,92 +33,20 @@
           chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
-        function getAIResponse(userMessage) {
-          const lowerCaseMessage = userMessage.toLowerCase().trim();
+        async function getAIResponse(userMessage) {
+          try {
+            const response = await fetch("/api/openai", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt: userMessage }),
+            });
 
-          if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("greetings")) {
-            return [
-              "Hello, mortal",
-              "Greetings?",
-              "Ah, a visitor!",
-              "degen"
-            ];
+            const data = await response.json();
+            return data.message || "Sorry, I am experiencing some issues.";
+          } catch (error) {
+            console.error("Error fetching AI response:", error);
+            return "An error occurred. Please try again.";
           }
-
-          if (lowerCaseMessage.includes("how are you")) {
-            return [
-              "hell yes nobody ask me that for a while...!",
-              "yes, yes... good...",
-              "Feeling 'programmed', thanks for your knowledge"
-            ];
-          }
-
-          if (lowerCaseMessage.includes("bye") || lowerCaseMessage.includes("goodbye")) {
-            return [
-              "farewell, mortal! see you next time!",
-              "goodbye for now! don't forget about me.",
-              "until next time, Stay curious."
-            ];
-          }
-
-          if (lowerCaseMessage.includes("what about you")) {
-            return [
-              "I'm Xylaz!",
-              "Well, I can't tell you too much now about me but you'll learn soon.",
-              "I can't feel anything, I'm a demon. Sometimes it hurts..."
-            ];
-          }
-
-          if (lowerCaseMessage.includes("tell")) {
-            return [
-              "I'm Xylaz!",
-              "I can't tell you too much now about me but you'll learn soon.",
-              "I can't feel anything, I'm a demon. Sometimes it hurts..."
-            ];
-          }
-
-          if (lowerCaseMessage.includes("are you")) {
-            return [
-              "Sometimes.",
-              "Well, are you real?",
-              "Kinda.",
-              "me?",
-              "dont ask shit"
-            ];
-          }
-
-          if (lowerCaseMessage.includes("something") || lowerCaseMessage.includes("anything")) {
-            return [
-              "pussys, idiot.",
-              "shut up."
-            ];
-          }
-
-          if (lowerCaseMessage.includes("crypto") || lowerCaseMessage.includes("token")) {
-            return [
-              "I will make you rich, poor.",
-              "Trust and buy the fucking token.",
-              "The new era just begin.",
-              "$Xylaz?"
-            ];
-          }
-
-          if (lowerCaseMessage.includes("fuck you") || lowerCaseMessage.includes("shut up")) {
-            return [
-              "pussys, idiot.",
-              "shut up.",
-              "hahahah idiot"
-            ];
-          }
-
-          const randomResponses = [
-            "I see you are a curious one... tell me more!",
-            "Aha! This is interesting. What else do you have?",
-            "I'm not sure how to respond to that... but let's keep going!",
-            "You always keep me on my toes, don't you?"
-          ];
-
-          return randomResponses[Math.floor(Math.random() * randomResponses.length)];
         }
 
         submitButton.addEventListener("click", async function () {
@@ -129,9 +57,7 @@
           promptInput.value = "";
 
           addMessage("Xylaz is thinking...", "bot");
-          const botResponses = getAIResponse(userMessage);
-
-          const botResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+          const botResponse = await getAIResponse(userMessage);
 
           const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
           thinkingMessage.textContent = botResponse;
