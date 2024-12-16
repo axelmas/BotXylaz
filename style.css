@@ -1,5 +1,5 @@
 @charset "utf-8";
-/* CSS Document */
+
 
 * {
     box-sizing: border-box;
@@ -50,11 +50,11 @@ body {
 }
 
 .chat-history .user-message {
-    color: #00FF2B; /* User messages in green */
+    color: #00FF2B; 
 }
 
 .chat-history .ai-message {
-    color: #FF0000; /* AI messages in red */
+    color: #FF0000;
 }
 
 .chat-input {
