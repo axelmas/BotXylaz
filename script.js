@@ -6,7 +6,8 @@ $(document).ready(function () {
   async function getAIResponse(prompt) {
     try {
       // Cambiar la URL a la de tu backend
-      const response = await fetch('http://localhost:3000/api/chat', {
+      const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,9 +28,9 @@ $(document).ready(function () {
     }
   }
 
-  // Evento de click en el botón de enviar
-  $('#send-button').click(async function () {
-    const userMessage = $('#user-input').val().trim(); // Trim para eliminar espacios al principio y final
+  // Función para enviar el mensaje
+  async function sendMessage() {
+    const userMessage = $('#user-input').val().trim(); // Trim para eliminar espacios
     if (!userMessage) return; // Si no hay mensaje, no hace nada
 
     $('#chat-history').append(`<p class="user-message">You: ${userMessage}</p>`);
@@ -41,13 +42,17 @@ $(document).ready(function () {
     // Reemplazar el mensaje de "Xylaz is typing..." por la respuesta real
     const lastBotMessage = $('#chat-history p.bot-message');
     lastBotMessage.text(`Xylaz: ${botResponse}`);
-  });
+  }
+
+  // Evento de click en el botón de enviar
+  $('#send-button').click(sendMessage);
 
   // Enviar mensaje al presionar Enter
   $('#user-input').keypress(function (event) {
-    if (event.key === 'Enter') { // Usar 'Enter' en lugar de 13 para mayor claridad
-      event.preventDefault(); // Evitar que se envíe el formulario (si es que existe uno)
-      $('#send-button').click(); // Hacer clic en el botón de enviar
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Evitar que se envíe el formulario
+      sendMessage(); // Llamar la misma función
     }
   });
 });
+
