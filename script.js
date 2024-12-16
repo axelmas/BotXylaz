@@ -2,12 +2,12 @@ $(document).ready(function () {
   // Mensaje inicial al cargar la página
   $('#chat-history').append('<p>Xylaz...</p>');
 
+  // Determinar baseUrl solo una vez
+  const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
+
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
-      // Determinar baseUrl según el entorno
-      const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
-
       // Realizar la solicitud POST
       const response = await fetch(`${baseUrl}/api/chat`, {
         method: 'POST',
