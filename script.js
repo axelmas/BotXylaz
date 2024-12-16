@@ -28,7 +28,14 @@
       // Función para obtener la respuesta del backend
       async function getAIResponse(prompt) {
         try {
-          const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
+          // Definir baseUrl con if-else
+          let baseUrl;
+          if (window.location.hostname === 'xylazbot.xyz') {
+            baseUrl = 'https://xylazbot.xyz';
+          } else {
+            baseUrl = 'http://localhost:3000';
+          }
+
           const response = await fetch(`${baseUrl}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -86,4 +93,3 @@
   </script>
 </body>
 </html>
-
