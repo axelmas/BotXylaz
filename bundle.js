@@ -3,7 +3,7 @@ $(document).ready(function () {
     const promptInput = $("#prompt");
     const submitBtn = $("#submit-btn");
 
-    // Función para agregar mensajes al historial del chat
+   
     function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "ai-message";
         const messageElement = `<div class="${messageClass}">${message}</div>`;
@@ -11,7 +11,7 @@ $(document).ready(function () {
         chatHistory.scrollTop(chatHistory[0].scrollHeight);
     }
 
-    // Función para obtener respuesta de la IA desde el servidor
+ 
     async function getAIResponse(userMessage) {
         try {
             const response = await fetch('/api/chat', {
@@ -34,22 +34,22 @@ $(document).ready(function () {
         }
     }
 
-    // Manejo del envío de mensajes
+   
     submitBtn.on("click", function () {
         const userMessage = promptInput.val().trim();
 
         if (userMessage) {
-            addMessage(userMessage, "user"); // Muestra el mensaje del usuario
-            promptInput.val(""); // Limpia el campo de entrada
+            addMessage(userMessage, "user"); 
+            promptInput.val(""); 
 
-            // Obtiene la respuesta del servidor
+           
             setTimeout(() => {
                 getAIResponse(userMessage);
-            }, 500); // Retraso simulado para respuesta de la IA
+            }, 500); // 
         }
     });
 
-    // Enviar mensaje al presionar Enter
+    
     promptInput.on("keypress", function (e) {
         if (e.which === 13) {
             submitBtn.click();
