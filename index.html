@@ -38,7 +38,7 @@
 
       async function getAIResponse(userMessage) {
         try {
-          const response = await fetch("/api/chat", {  // Ruta actualizada
+          const response = await fetch("http://localhost:3000/api/chat", {  // Ruta actualizada
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
