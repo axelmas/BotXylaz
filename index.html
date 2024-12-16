@@ -20,15 +20,13 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    // Usamos jQuery $(document).ready para garantizar que el DOM esté listo
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
       const chatHistory = document.getElementById("chat-history");
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
-      // Función para agregar mensajes al historial de chat
+     
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
@@ -38,33 +36,24 @@
         chatHistory.scrollTop = chatHistory.scrollHeight;
       }
 
-      // Función para obtener la respuesta de la IA
+     
       async function getAIResponse(userMessage) {
         try {
-          // Aquí solo se declara baseUrl una vez, sin duplicados
-          const baseUrl = window.location.hostname === "xylazbot.xyz" 
-                          ? "https://xylazbot.xyz" 
-                          : "http://localhost:3000";  // Ajuste según tu entorno
-
-          const response = await fetch(`${baseUrl}/api/chat`, {
+          const response = await fetch("/api/chat", {  // La ruta debe coincidir con la del backend
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
           });
 
-          if (!response.ok) {
-            throw new Error('Error al conectar con el backend');
-          }
-
           const data = await response.json();
-          return data.response || "Sorry, I am experiencing some issues.";  // Cambio de 'message' a 'response'
+          return data.response || "Sorry, I am experiencing some issues."; // Cambié 'message' a 'response'
         } catch (error) {
           console.error("Error fetching AI response:", error);
-          return "I will be ready in 2 hours."; // Mensaje en caso de error
+          return "An error occurred. Please try again.";
         }
       }
 
-      // Agregar evento de clic al botón
+      // Cuando el usuario haga clic en el botón de enviar
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
@@ -72,22 +61,21 @@
         addMessage(userMessage, "user");
         promptInput.value = "";
 
-        addMessage("Xylaz is thinking...", "bot");
+        addMessage("Xylaz say...", "bot");
         const botResponse = await getAIResponse(userMessage);
 
         const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
-        thinkingMessage.textContent = botResponse;
+        thinkingMessage.textContent = Xylaz: ${botResponse};
       });
 
-      // Agregar evento de tecla para enviar mensaje con Enter
+      // Enviar mensaje al presionar Enter
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
-          event.preventDefault(); // Evitar que se envíe el formulario al presionar Enter
+          event.preventDefault();
         }
       });
     });
   </script>
 </body>
 </html>
-
