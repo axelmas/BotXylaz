@@ -63,7 +63,6 @@ body {
     padding: 10px;
     border-radius: 5px;
     background-color: #000000;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .chat-history .user-message {
@@ -106,12 +105,3 @@ body {
     margin-left: 10px;
 }
 
-/* Definición de la animación slide-in */
-@keyframes slide-in {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
