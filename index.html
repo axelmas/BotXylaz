@@ -27,6 +27,7 @@
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
+      // Función para agregar mensajes al historial de chat
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
@@ -36,9 +37,15 @@
         chatHistory.scrollTop = chatHistory.scrollHeight;
       }
 
+      // Función para obtener la respuesta de la IA
       async function getAIResponse(userMessage) {
         try {
-          const response = await fetch("http://localhost:3000/api/chat", {  // Ruta actualizada
+          // Verifica si estás en producción o en desarrollo y ajusta la URL
+          const baseUrl = window.location.hostname === "xylazbot.xyz" 
+                          ? "https://xylazbot.xyz" 
+                          : "http://localhost:3000";  // Aquí puedes ajustar la URL según tu entorno
+
+          const response = await fetch(`${baseUrl}/api/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
