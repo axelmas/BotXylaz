@@ -1,5 +1,19 @@
 @charset "utf-8";
 
+.user-message {
+    text-align: right;
+    background-color: #e1ffc7;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+}
+.ai-message {
+    text-align: left;
+    background-color: #f1f0f0;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+}
 
 * {
     box-sizing: border-box;
@@ -76,7 +90,7 @@ body {
 }
 
 .chat-input input[type="text"]::placeholder {
-    color: #444;
+    color: #888; /* Gris más suave */
 }
 
 .chat-input button {
@@ -87,4 +101,13 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
