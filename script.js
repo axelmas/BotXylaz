@@ -3,12 +3,40 @@ require('dotenv').config();
 
 $(document).ready(function () {
   
-  $('#chat-history').append('<p>I am Xylaz...</p>');
+  $('#chat-history').append('<p>Xylaz...</p>');
 
   
   const apiKey = process.env.OPENAI_API_KEY;
 
-  
+  const { Configuration, OpenAIApi } = require('openai');
+
+// Accede a la clave desde las variables de entorno
+const apiKey = process.env.OPENAI_API_KEY;
+
+// Configura la API de OpenAI
+const configuration = new Configuration({
+  apiKey: apiKey,
+});
+
+const openai = new OpenAIApi(configuration);
+
+// Función para interactuar con OpenAI
+async function callOpenAI(prompt) {
+  try {
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo", // o "gpt-4" si tienes acceso
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 100,
+    });
+
+    console.log("Respuesta de OpenAI:", response.data.choices[0].message.content);
+  } catch (error) {
+    console.error("Error al llamar a la API de OpenAI:", error.message);
+  }
+}
+
+// Prueba la función
+callOpenAI("hey, how are you");
   async function getAIResponse(prompt) {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
