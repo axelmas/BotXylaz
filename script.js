@@ -2,12 +2,12 @@ $(document).ready(function () {
   // Mensaje inicial al cargar la página
   $('#chat-history').append('<p>Xylaz...</p>');
 
-  // Determinar baseUrl solo una vez
-  const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
-
   // Función para obtener la respuesta del backend (API)
   async function getAIResponse(prompt) {
     try {
+      // Asignar baseUrl una sola vez
+      const baseUrl = window.location.hostname === 'xylazbot.xyz' ? 'https://xylazbot.xyz' : 'http://localhost:3000';
+
       // Realizar la solicitud POST
       const response = await fetch(`${baseUrl}/api/chat`, {
         method: 'POST',
@@ -34,8 +34,8 @@ $(document).ready(function () {
 
   // Función para enviar el mensaje
   async function sendMessage() {
-    const userMessage = $('#user-input').val().trim(); // Eliminar espacios innecesarios
-    if (!userMessage) return; // Si no hay mensaje, no hacer nada
+    const userMessage = $('#user-input').val().trim(); // Trim para eliminar espacios
+    if (!userMessage) return; // Si no hay mensaje, no hace nada
 
     $('#chat-history').append(`<p class="user-message">You: ${userMessage}</p>`);
     $('#user-input').val(''); // Limpiar el campo de entrada
@@ -48,16 +48,24 @@ $(document).ready(function () {
     lastBotMessage.text(`Xylaz: ${botResponse}`);
   }
 
-  // Evento de click en el botón de enviar
-  $('#send-button').click(function () {
-    sendMessage();
-  });
+  // Verificar que los elementos existan antes de añadir los event listeners
+  const submitButton = $('#submit-btn');
+  const userInput = $('#user-input');
 
-  // Enviar mensaje al presionar Enter
-  $('#user-input').keypress(function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // Evitar que se envíe el formulario
-      sendMessage(); // Llamar la misma función
-    }
-  });
+  if (submitButton.length && userInput.length) {
+    // Evento de click en el botón de enviar
+    submitButton.click(function () {
+      sendMessage();
+    });
+
+    // Enviar mensaje al presionar Enter
+    userInput.keypress(function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Evitar que se envíe el formulario
+        sendMessage(); // Llamar la misma función
+      }
+    });
+  } else {
+    console.error('El botón de enviar o el campo de entrada no existen en el DOM');
+  }
 });
