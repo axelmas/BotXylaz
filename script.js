@@ -39,7 +39,8 @@
      
       async function getAIResponse(userMessage) {
         try {
-          const response = await fetch("/api/chat", {  // La ruta debe coincidir con la del backend
+          const response = await fetch("https://xylazbot.xyz/api/chat", { // Ajusta la URL según tu servidor
+
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
