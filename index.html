@@ -26,7 +26,10 @@
       const promptInput = document.getElementById("prompt");
       const submitButton = document.getElementById("submit-btn");
 
-     
+      // URL completa del backend en DreamHost
+      const BACKEND_URL = "https://xylazbot.xyz/api/chat";
+
+      // Función para agregar mensajes al historial
       function addMessage(message, sender) {
         const messageClass = sender === "user" ? "user-message" : "bot-message";
         const messageElement = document.createElement("div");
@@ -36,24 +39,28 @@
         chatHistory.scrollTop = chatHistory.scrollHeight;
       }
 
-     
+      // Función para obtener la respuesta del bot
       async function getAIResponse(userMessage) {
         try {
-          const response = await fetch("/api/chat", {  // La ruta debe coincidir con la del backend
+          const response = await fetch(BACKEND_URL, {  // URL del backend en DreamHost
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userMessage }),
           });
 
+          if (!response.ok) {
+            throw new Error("Server error");
+          }
+
           const data = await response.json();
-          return data.response || "Sorry, I am experiencing some issues."; // Cambié 'message' a 'response'
+          return data.response || "Sorry, I am experiencing some issues.";
         } catch (error) {
           console.error("Error fetching AI response:", error);
           return "An error occurred. Please try again.";
         }
       }
 
-      // Cuando el usuario haga clic en el botón de enviar
+      // Evento de clic en el botón de enviar
       submitButton.addEventListener("click", async function () {
         const userMessage = promptInput.value;
         if (!userMessage.trim()) return;
@@ -61,14 +68,14 @@
         addMessage(userMessage, "user");
         promptInput.value = "";
 
-        addMessage("Xylaz say...", "bot");
+        addMessage("Xylaz is thinking...", "bot");
         const botResponse = await getAIResponse(userMessage);
 
         const thinkingMessage = chatHistory.querySelector(".bot-message:last-child");
         thinkingMessage.textContent = `Xylaz: ${botResponse}`;
       });
 
-      // Enviar mensaje al presionar Enter
+      // Evento para enviar mensaje al presionar Enter
       promptInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
           submitButton.click();
@@ -79,3 +86,4 @@
   </script>
 </body>
 </html>
+
